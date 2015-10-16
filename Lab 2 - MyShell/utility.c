@@ -18,7 +18,7 @@
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
 
-char *get_buffer()
+char *get_buffer(void)
 {
 	char buffer[BUFFER_LEN];
 	int pos = 0;
@@ -26,7 +26,7 @@ char *get_buffer()
 
 	if(!buffer)
 	{
-		printf(stderr, "Allocation Error\n");
+		fprintf(stderr, "Shell; Allocation Error\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45,4 +45,38 @@ char *get_buffer()
 		}
 		pos++;
 	}
+
+}
+
+int sh_cd(char arg[BUFFER_LEN])
+{
+	if(arg == NULL)
+	{
+		fprintf(stderr, "Shell: Expected directory");
+	}
+	else
+	{
+		if(chdir(arg) != 0)
+		{
+			perror("Shell");
+		}
+	}
+	return EXIT_SUCCESS;
+}
+
+int dir_list(void)
+{
+	DIR *d;
+	struct dirent *dir;
+	d = opendir(".");
+
+	if(d)
+	{
+		while((dir = readdir(d)) != NULL)
+		{
+			printf("%s\n", dir->d_name);
+		}
+		closedir(d);
+	}
+	return EXIT_SUCCESS;
 }

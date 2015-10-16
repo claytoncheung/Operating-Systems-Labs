@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
         if (strcmp(command, "cd") == 0)
         {
             // your code here
+        	sh_cd(arg);
 
         }
 
