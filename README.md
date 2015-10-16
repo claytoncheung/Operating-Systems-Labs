@@ -1,15 +1,15 @@
 # Operating-Systems-Labs
 OS Fall 2015 Labs
 
-**cd <directory>** - If <directory> is not present, print current directory. Display error if directory doesn't exist. Also change PWD environment variable.
+**cd `directory`** - If `directory` is not present, print current directory. Display error if directory doesn't exist. Also change PWD environment variable.
 
 **clr** - Clear the screen
 
-**dir <directory>** - List contents of <directory>
+**dir `directory`** - List contents of `directory`
 
 **environ** - List all environment strings
 
-**echo <comment>** - Display <comment> followed by new line (spaces/tabs may be reduced to single space)
+**echo `comment`** - Display `comment` followed by new line (spaces/tabs may be reduced to single space)
 
 **help** - Display the user manual using the `more` filter
 
