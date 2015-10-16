@@ -27,14 +27,20 @@ int main(int argc, char *argv[])
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
-
+    
+    const char s[2] = " "; //Set the delimiter for the tokenizer
+    
     // Parse the commands provided using argc and argv
 
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
-    	buffer=get_buffer();
+    	buffer=get_buffer(); 
+    	
+    	command = strtok(buffer, s); //Get the command from the user input using tokenization
+    	arg = strtok(command, s);
+    	
 
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
