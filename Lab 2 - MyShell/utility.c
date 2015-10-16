@@ -13,5 +13,14 @@
 #include <string.h>
 #include "utility.h"
 
+//Uses envp passed from main function
+void environVariable(char **envp){
+	char** env;
+	for (env = envp; *env != 0; env++)
+	{
+		char* thisEnv = *env;
+		printf("%s\n", thisEnv);
+	}
+}
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file

@@ -21,7 +21,7 @@
 
 // Define functions declared in myshell.h here
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *envp[])
 {
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
