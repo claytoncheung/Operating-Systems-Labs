@@ -5,13 +5,13 @@ OS Fall 2015 Labs
 
 **clr** - (*Scott*) Clear the screen
 
-**dir <directory>** - (*Nick*)List contents of <directory>
+**dir <directory>** - (*Nick*) List contents of <directory>
 
-**environ** - List all environment strings
+**environ** - (*Clayton*) List all environment strings
 
 **echo <comment>** - (*Neil*) Display <comment> followed by new line (spaces/tabs may be reduced to single space)
 
-**help** - (*Malek*)Display the user manual using the `more` filter
+**help** - (*Malek*) Display the user manual using the `more` filter
 
 **pause** - (*Malek*) Pause operations until 'Enter' is pressed
 
@@ -21,7 +21,7 @@ Shell environment should also contain `shell=<pathname>/myshell` which is the pa
 
 All other commands are program invocation (use `fork` and `exec` to create child processes) and should be executed in the path above.
 
-Must take command line input from file w/ command line arguments. (i.e. `myshell batchfile` where batchfile should contain command lines to be executed, shell exits when complete)
+(*Clayton*) Must take command line input from file w/ command line arguments. (i.e. `myshell batchfile` where batchfile should contain command lines to be executed, shell exits when complete)
 
 ###Optional; +10%
 Must support I/O-redirection on either/both stdin/stdout:
