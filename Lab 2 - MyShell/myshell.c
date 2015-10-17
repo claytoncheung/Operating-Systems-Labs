@@ -45,6 +45,11 @@ int main(int argc, char *argv[])
 
         }
 
+        else if(strcmp(command, "dir") == 0)
+        {
+        	dir_list();
+        }
+
         // other commands here...
         
         // quit command -- exit the shell
