@@ -15,7 +15,7 @@
 #include "myshell.h"
 
 // Put macros or constants here using #define
-#define BUFFER_LEN 256
+//#define BUFFER_LEN 256
 
 // Put global environment variables here
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
-    	buffer=get_buffer();
+    	strcpy(buffer, get_buffer());
 
         // Check the command and execute the operations for each command
         // cd command -- change the current directory

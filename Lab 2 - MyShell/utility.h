@@ -5,15 +5,19 @@
  * All rights reserved.
  * 
  */
+
+
 #ifndef UTILITY_H_
 #define UTILITY_H_
-#include "myshell.c";
+#include "myshell.h"
+
 
 // Include your relevant functions declarations here they must start with the
+// extern keyword such as in the following example:
+// extern void display_help(void);
+
 extern char *get_buffer();
 extern int sh_cd(char arg[BUFFER_LEN]);
 extern int dir_list(void);
-// extern keyword such as in the following example:
-// extern void display_help(void);
 
 #endif /* UTILITY_H_ */

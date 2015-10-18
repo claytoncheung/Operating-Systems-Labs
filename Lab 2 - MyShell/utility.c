@@ -13,7 +13,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include "utility.h"
-#include "myshell.c"
+//#include "myshell.c"
 
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
