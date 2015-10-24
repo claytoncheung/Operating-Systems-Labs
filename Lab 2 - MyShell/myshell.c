@@ -28,7 +28,10 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
 
-    printf("> ");
+    char cwd[1024] = { 0 };
+    getcwd(cwd, sizeof(cwd));
+
+    printf("%s > ", cwd);
 
     strcpy(buffer, get_buffer());
     printf("%s\n", buffer);
