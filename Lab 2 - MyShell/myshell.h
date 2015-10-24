@@ -8,6 +8,7 @@
 #ifndef MYSHELL_H_
 #define MYSHELL_H_
 
+#define BUFFER_LEN 256
 // Include your relevant functions declarations here they must start with the 
 // extern keyword such as in the following example:
 // extern void display_help(void);
