@@ -28,28 +28,27 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
 
-    char cwd[1024] = { 0 };
-    getcwd(cwd, sizeof(cwd));
-
-    printf("%s > ", cwd);
-
-    strcpy(buffer, get_buffer());
-    printf("%s\n", buffer);
-    strcpy(command, strtok(buffer, " "));
-
-    /*********************************/
-    /********* ARG ONLY TAKEN ********/
-    /********* WHEN NEEDED BY ********/
-    /*********    COMMAND     ********/
-    /*********************************/
-
     // Parse the commands provided using argc and argv
 
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
-    	strcpy(buffer, get_buffer());
+
+        char cwd[1024] = { 0 };
+        getcwd(cwd, sizeof(cwd));
+
+        printf("%s > ", cwd);
+
+        strcpy(buffer, get_buffer());
+        printf("%s\n", buffer);
+        strcpy(command, strtok(buffer, " "));
+
+    /*********************************/
+    /********* ARG ONLY TAKEN ********/
+    /********* WHEN NEEDED BY ********/
+    /*********    COMMAND     ********/
+    /*********************************/
 
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
