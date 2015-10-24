@@ -28,6 +28,18 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
 
+    printf("> ");
+
+    strcpy(buffer, get_buffer());
+    printf("%s\n", buffer);
+    strcpy(command, strtok(buffer, " "));
+
+    /*********************************/
+    /********* ARG ONLY TAKEN ********/
+    /********* WHEN NEEDED BY ********/
+    /*********    COMMAND     ********/
+    /*********************************/
+
     // Parse the commands provided using argc and argv
 
     // Perform an infinite loop getting command input from users
@@ -41,6 +53,7 @@ int main(int argc, char *argv[])
         if (strcmp(command, "cd") == 0)
         {
             // your code here
+            strcpy(arg, strtok(NULL, " "));
         	sh_cd(arg);
 
         }

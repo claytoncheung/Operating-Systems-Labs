@@ -50,6 +50,8 @@ char *get_buffer(void)
 
 int sh_cd(char arg[BUFFER_LEN])
 {
+	char cwd[1024] = { 0 };
+	getcwd(cwd, sizeof(cwd));
 	if(arg == NULL)
 	{
 		fprintf(stderr, "Shell: Expected directory");
@@ -59,6 +61,7 @@ int sh_cd(char arg[BUFFER_LEN])
 		if(chdir(arg) != 0)
 		{
 			perror("Shell");
+			printf("Current Directory: %s\n", cwd);
 		}
 	}
 	return EXIT_SUCCESS;
