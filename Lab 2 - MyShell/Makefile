@@ -2,13 +2,13 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
 LFLAGS = 
 LIBS = -lm
-SOURCES = myshell.c utility.c
+SOURCES = myshell.c utility.c 
 OBJECTS = $(subst .c,.o,$(SOURCES))
 EXE = myshell.exe
 .PHONY: clean help
 
-%.exe : %.o
-	$(CC) $(CFLAGS) $< $(LIBS) -o $@ 
+myshell.exe : myshell.o utility.o
+	$(CC) $(CFLAGS) $^ $(LIBS) -o $@ 
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< 

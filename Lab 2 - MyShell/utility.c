@@ -9,9 +9,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <stdbool.h>
 #include <sys/types.h>
 #include <string.h>
 #include "utility.h"
+//#include "myshell.c"
 
 //Uses envp passed from main function
 void environVariable(char **envp){
@@ -24,3 +26,69 @@ void environVariable(char **envp){
 }
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
+
+char *get_buffer(void)
+{
+	char buffer[BUFFER_LEN];
+	int pos = 0;
+	int c;
+
+	if(!buffer)
+	{
+		fprintf(stderr, "Shell; Allocation Error\n");
+		exit(EXIT_FAILURE);
+	}
+
+	while(1)
+	{
+		c=getchar();
+
+		if(c==EOF||c=='\n')
+		{
+			buffer[pos] = '\0';
+			return buffer;
+		}
+		else
+		{
+			buffer[pos] = c;
+		}
+		pos++;
+	}
+
+}
+
+int sh_cd(char arg[BUFFER_LEN])
+{
+	char cwd[1024] = { 0 };
+	getcwd(cwd, sizeof(cwd));
+	if(arg == NULL)
+	{
+		fprintf(stderr, "Shell: Expected directory");
+	}
+	else
+	{
+		if(chdir(arg) != 0)
+		{
+			perror("Shell");
+			printf("Current Directory: %s\n", cwd);
+		}
+	}
+	return EXIT_SUCCESS;
+}
+
+int dir_list(void)
+{
+	DIR *d;
+	struct dirent *dir;
+	d = opendir(".");
+
+	if(d)
+	{
+		while((dir = readdir(d)) != NULL)
+		{
+			printf("%s\n", dir->d_name);
+		}
+		closedir(d);
+	}
+	return EXIT_SUCCESS;
+}
