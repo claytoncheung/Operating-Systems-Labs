@@ -19,15 +19,18 @@ OS Fall 2015 Labs
 
 Shell environment should also contain `shell=<pathname>/myshell` which is the path to the directory from which the shell was executed.
 
-All other commands are program invocation (use `fork` and `exec` to create child processes) and should be executed in the path above.
-
-(*Clayton*) Must take command line input from file w/ command line arguments. (i.e. `myshell batchfile` where batchfile should contain command lines to be executed, shell exits when complete)
-
-###Optional; +10%
 Must support I/O-redirection on either/both stdin/stdout:
 `programname arg1 arg2 <inputfile> outputfile`
 will execute `programname` with the arguments `arg1` and `arg2`, FILE streams replacing `inputfile` and `outputfile`
 Should also support `dir`, `environ`, `echo`, `help` for `stdout` redirection
 
+(*Clayton*) Must take command line input from file w/ command line arguments. (i.e. `myshell batchfile` where batchfile should contain command lines to be executed, shell exits when complete)
 
 Must support background execution of programs with the argument `&`
+
+###Optional; +10%
+
+
+All other commands are program invocation (use `fork` and `exec` to create child processes) and should be executed in the path above.
+
+
