@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         // Unsupported command
         else
         {
-            fputs("Unsupported command, use help to display the manual\n", stderr);
+            fputs("Unsupported command, use help to display the manual", stderr);
         }
     }
     return EXIT_SUCCESS;
