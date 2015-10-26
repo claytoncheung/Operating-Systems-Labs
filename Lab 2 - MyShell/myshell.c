@@ -31,11 +31,16 @@ int main(int argc, char *argv[])
     // Parse the commands provided using argc and argv
 
     // Perform an infinite loop getting command input from users
+    getcwd(shell_dir, sizeof(shell_dir));
+    printf("Shell = %s\nCopyright (c) 2015\n", shell_dir);
+
+
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
 
         char cwd[1024] = { 0 };
+        char shell_dir[BUFFER_LEN] = { 0 };
         getcwd(cwd, sizeof(cwd));
 
         printf("%s > ", cwd);

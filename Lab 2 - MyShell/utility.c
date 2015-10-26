@@ -18,20 +18,24 @@
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
 
+//Takes in command from terminal prompt, including whitespace
 char *get_buffer(void)
 {
 	char buffer[BUFFER_LEN];
 	int pos = 0;
 	int c;
 
+	//Throws an error if the buffer is empty
 	if(!buffer)
 	{
 		fprintf(stderr, "Shell; Allocation Error\n");
 		exit(EXIT_FAILURE);
 	}
 
+	//Continously loops until told to return a value
 	while(1)
 	{
+		//takes the iput character by character and stores as an integer, then reconstructs the input as a string. Returns string to call
 		c=getchar();
 
 		if(c==EOF||c=='\n')
@@ -48,6 +52,7 @@ char *get_buffer(void)
 
 }
 
+//Changes the working directory to the arugment given.
 int sh_cd(char arg[BUFFER_LEN])
 {
 	char cwd[1024] = { 0 };
@@ -56,6 +61,8 @@ int sh_cd(char arg[BUFFER_LEN])
 	{
 		fprintf(stderr, "Shell: Expected directory");
 	}
+	
+	//Throws an error if the directory cannot be changed, lists current working directory.
 	else
 	{
 		if(chdir(arg) != 0)
@@ -67,12 +74,15 @@ int sh_cd(char arg[BUFFER_LEN])
 	return EXIT_SUCCESS;
 }
 
+//Lists directory contents.
 int dir_list(void)
 {
+	//Structs from the unistd.h library for listing the directory
 	DIR *d;
 	struct dirent *dir;
 	d = opendir(".");
 
+	//While there are still directory contents unlisted, this loop will list them, and will close the directory at the end.
 	if(d)
 	{
 		while((dir = readdir(d)) != NULL)
