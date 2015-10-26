@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     // Perform an infinite loop getting command input from users
     getcwd(shell_dir, sizeof(shell_dir));
-    printf("Shell = %s\nCopyright (c) 2015\n", shell_dir);
+    printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);
 
 
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
