@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
+    char shell_dir[BUFFER_LEN] = { 0 };
+
 
     // Parse the commands provided using argc and argv
 
@@ -40,7 +42,6 @@ int main(int argc, char *argv[])
         // Perform string tokenization to get the command and argument
 
         char cwd[1024] = { 0 };
-        char shell_dir[BUFFER_LEN] = { 0 };
         getcwd(cwd, sizeof(cwd));
 
         printf("%s > ", cwd);
