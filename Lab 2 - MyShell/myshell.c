@@ -34,13 +34,28 @@ int main(int argc, char *argv[])
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
-    	strcpy(buffer, get_buffer());
+
+        char cwd[1024] = { 0 };
+        getcwd(cwd, sizeof(cwd));
+
+        printf("%s > ", cwd);
+
+        strcpy(buffer, get_buffer());
+        printf("%s\n", buffer);
+        strcpy(command, strtok(buffer, " "));
+
+    /*********************************/
+    /********* ARG ONLY TAKEN ********/
+    /********* WHEN NEEDED BY ********/
+    /*********    COMMAND     ********/
+    /*********************************/
 
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
         if (strcmp(command, "cd") == 0)
         {
             // your code here
+            strcpy(arg, strtok(NULL, " "));
         	sh_cd(arg);
 
         }
