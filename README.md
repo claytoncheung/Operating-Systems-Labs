@@ -17,9 +17,9 @@ OS Fall 2015 Labs
 
 **quit** - (*Neil*) Quit the shell
 
-Shell environment should also contain `shell=<pathname>/myshell` which is the path to the directory from which the shell was executed.
+(*Nick*)Shell environment should also contain `shell=<pathname>/myshell` which is the path to the directory from which the shell was executed.
 
-Must support I/O-redirection on either/both stdin/stdout:
+(*Escott*)Must support I/O-redirection on either/both stdin/stdout:
 `programname arg1 arg2 <inputfile> outputfile`
 will execute `programname` with the arguments `arg1` and `arg2`, FILE streams replacing `inputfile` and `outputfile`
 Should also support `dir`, `environ`, `echo`, `help` for `stdout` redirection
