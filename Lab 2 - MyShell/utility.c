@@ -126,7 +126,7 @@ int help(char arg[BUFFER_LEN])
 		FILE *fp = fopen("help.txt", "r");
 
 		//While the end of the file is not reached
-		while( (ch = fgetc(fp) ) != EOF )
+		while( (ch = fgetc(fp)) != EOF )
 		{
 			//Prints the contents of the 'help' file
 			printf("%c", ch);
