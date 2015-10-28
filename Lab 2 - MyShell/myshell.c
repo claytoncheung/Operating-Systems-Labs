@@ -64,7 +64,17 @@ int main(int argc, char *argv[], char *envp[])
         {
         	dir_list();
         }
-
+        
+        else if(strcmp(command, "pause") == 0)
+        {
+            pause();
+        }
+        
+        else if(strcmp(command, "help") == 0)
+        {
+            strcpy(arg, strtok(NULL, " "));
+            help(arg);
+        }
         // other commands here...
         
         // quit command -- exit the shell
