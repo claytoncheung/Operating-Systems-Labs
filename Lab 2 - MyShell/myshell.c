@@ -75,14 +75,27 @@ int main(int argc, char *argv[], char *envp[])
             strcpy(arg, strtok(NULL, " "));
             help(arg);
         }
-        // other commands here...
-        
+		
+		else if(strcmp(command, "environ") == 0) {
+			environVariable(**envp);
+		}
+		
+		//to invoke with batch file, there should be only one argument which is the name of the batch file
+		//myshell exits after completing the requested commands
+		else if (argc == 1) {
+			batch(argv[1]);
+			return EXIT_SUCCESS;
+		}
+		
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
-
+		
+		/*REMEMBER TO ADD ADDITIONAL COMMANDS TO batch FUNCTION IN utility.c*/
+		
+		
         // Unsupported command
         else
         {

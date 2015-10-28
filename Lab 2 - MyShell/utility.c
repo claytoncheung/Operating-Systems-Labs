@@ -50,13 +50,75 @@ char *get_buffer(void)
 }
 
 //Uses envp passed from main function
-void environVariable(char **envp){
+int environVariable(char **envp) {
 	char** env;
 	for (env = envp; *env != 0; env++)
 	{
 		char* thisEnv = *env;
 		printf("%s\n", thisEnv);
 	}
+	return EXIT_SUCCESS;
+}
+
+//Uses arguments passed from main function; argument should be the filename
+int batch(char arg[BUFFER_LEN]) {
+	FILE *fp = fopen (arg, "r");
+	
+	//Holds our command and arguments
+	char *line = NULL;
+	
+	while (fgets(line, BUFFER_LEN, fp) != NULL) {
+		//tokenize line
+        strcpy(command, strtok(line, " "));
+		
+		if (strcmp(command, "cd") == 0)
+        {
+=            strcpy(arg, strtok(NULL, " "));
+        	sh_cd(arg);
+
+        }
+
+        else if(strcmp(command, "dir") == 0)
+        {
+        	dir_list();
+        }
+        
+        else if(strcmp(command, "pause") == 0)
+        {
+            pause();
+        }
+        
+        else if(strcmp(command, "help") == 0)
+        {
+            strcpy(arg, strtok(NULL, " "));
+            help(arg);
+        }
+		
+		else if(strcmp(command, "environ") == 0) {
+			environVariable(**envp);
+		}
+		        
+        // quit command -- exit the shell
+        else if (strcmp(command, "quit") == 0)
+        {
+            return EXIT_SUCCESS;
+        }
+		/* ADD ANY OTHER ADDITIONAL COMMANDS HERE
+		
+		
+		
+		
+		*/
+        // Unsupported command
+        else
+        {
+            fputs("Unsupported command, use help to display the manual", stderr);
+        }
+
+	}
+	
+	fclose(fp);
+	return EXIT_SUCCESS;
 }
 
 int sh_cd(char arg[BUFFER_LEN])
