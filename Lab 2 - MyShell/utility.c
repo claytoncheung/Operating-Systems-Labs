@@ -83,3 +83,57 @@ int dir_list(void)
 	}
 	return EXIT_SUCCESS;
 }
+
+int pause(void)
+{
+	printf("**Execution Paused**\n");
+	
+	//Pauses execution of program until Enter is pressed
+	fprintf(stderr, "Press [Enter] to continue...");
+	
+	//Gets user input
+	getchar();
+
+	//Returns to main program
+	return EXIT_SUCCESS;
+
+}
+
+int help(char arg[BUFFER_LEN])
+{
+
+	char ch;
+
+	//If 'more' is entered after 'help'
+	if(strcmp(arg, "more") == 0)
+	{
+		//Opens the 'helpmore' file
+		FILE *fp = fopen("helpmore.txt", "r");
+
+		//While the end of the file is not reached
+		while( (ch = fgetc(fp) ) != EOF )
+		{
+			//Prints the contents of the 'helpmore' file
+			printf("%c", ch);
+		}
+		fclose(fp);
+	}
+	
+
+	else
+	{
+		//Opens the 'help' file
+		FILE *fp = fopen("help.txt", "r");
+
+		//While the end of the file is not reached
+		while( (ch = fgetc(fp) ) != EOF )
+		{
+			//Prints the contents of the 'help' file
+			printf("%c", ch);
+		}
+		fclose(fp);	
+	}
+	
+	printf("\n");
+	return EXIT_SUCCESS;
+}
