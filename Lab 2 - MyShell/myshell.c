@@ -27,17 +27,18 @@ int main(int argc, char *argv[], char **envp)
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
-	printf("1");
+
     // Parse the commands provided using argc and argv
-    
-    //using this to test
-    if (argc >= 1) {
-	printf("2");
-	batch(argv[1], envp);
-	printf("3");
-	return EXIT_SUCCESS;
+    //to invoke with batch file, there should be only one argument which is the name of the batch file
+	//myshell exits after completing the requested commands
+	printf("%d\n",argc);	//for testing
+    if (argc == 2) {		//causing segmentation fault
+		printf("111");
+		batch(argv[1], envp);
+		printf("222");
+		return EXIT_SUCCESS;
     }
-	printf("4");
+	printf("333");
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
@@ -84,16 +85,10 @@ int main(int argc, char *argv[], char **envp)
             help(arg);
         }
 	
-	else if(strcmp(command, "environ") == 0) {
-		environVariable(envp);
-	}
+		else if(strcmp(command, "environ") == 0) {
+			environVariable(envp);
+		}
 	
-	//to invoke with batch file, there should be only one argument which is the name of the batch file
-	//myshell exits after completing the requested commands
-	/*else if (argc == 1) {
-		batch(argv[1], envp);
-		return EXIT_SUCCESS;
-	}*/
 		
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
