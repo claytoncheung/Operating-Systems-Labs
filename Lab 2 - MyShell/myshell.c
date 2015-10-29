@@ -91,7 +91,14 @@ int main(int argc, char *argv[], char **envp)
         {
             return EXIT_SUCCESS;
         }
-		
+		else if (strcmp(command, "echo") == 0)
+        {
+            for(int i = 5; i < sizeof(buffer); i++)
+            {
+                arg[i-5] =  buffer[i];
+            }
+            printf("%s\n", arg);
+        }
 		/*REMEMBER TO ADD ADDITIONAL COMMANDS TO batch FUNCTION IN utility.c*/
 		
 		
