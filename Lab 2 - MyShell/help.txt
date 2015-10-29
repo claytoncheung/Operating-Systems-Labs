@@ -3,10 +3,10 @@ Type 'help more' to see a more detailed explanation for each command.
 
 Below is a list of all the commands and syntax as well as their functionalities:
 
-cd-		    cd <directory>		Change the current default directory to <directory>
-dir-	    dir <directory>		Lists the contents of the directory <directory>
-echo-	    echo <comment>		Displays <comment> on the display
-environ-  environ				    Lists all the environment strings
-pause-	  pause				      Pauses operation of the shell 
-clr-	    clr					      Clears the screen
-quit-	    quit				      Quits the shell
+cd-		cd <directory>		Change the current default directory to <directory>
+dir-	    	dir <directory>		Lists the contents of the directory <directory>
+echo-	    	echo <comment>		Displays <comment> on the display
+environ-  	environ			Lists all the environment strings
+pause-	  	pause			Pauses operation of the shell 
+clr-	    	clr			Clears the screen
+quit-	    	quit			Quits the shell
