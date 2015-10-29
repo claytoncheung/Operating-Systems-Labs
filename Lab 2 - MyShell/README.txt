@@ -40,7 +40,7 @@ CONTRIBUTORS
 
 Name			              Student Number
 Malek Mustapha-Abdullah 100541476
-Clayton Cheung
+Clayton Cheung          100539921
 Neil Ramdath
 Dominick Mancini        100517944
 Scott McLean
