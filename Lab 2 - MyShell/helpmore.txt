@@ -1,0 +1,29 @@
+These shell commands are defined internally. Type 'help more' to see this list.
+Type 'help' to see a less detailed explanation for each command.
+
+Below is a list of all the commands and syntax, in depth explanation as well as their functionalities:
+
+cd-		    cd <directory>		Change the current default directory to <directory>
+		      -If the current directory is <user@computer:~$> entering the command <cd Desktop> will change the current directory to <user@computer:~/Desktop$>
+		      -If the <directory> argument is not present, the program will report the current directory
+
+dir-	    dir <directory>		Lists the contents of the directory <directory>
+		      -This command prints the name of all the files inside the directory that is specified
+		      -If you have the files "Pictures" and "Music" inside "Documents", then using <dir Documents> will print: Pictures	Music
+
+echo-	    echo <comment>		Displays <comment> on the display
+		      -This command prints the message that is input by the user
+		      -For example: <echo Hello World> will simply print Hello World on the display
+
+environ-  environ				Lists all the environment strings
+		      -Just entering <environ> will print a list of all the environment variables to the display
+
+pause-	  pause				Pauses operation of the shell
+		      -Entering <pause> will pause execution of any process in the shell
+		      -Pressing the [Enter] button will return to normal operation
+
+clr-      clr					Clears the screen
+		      -Entering <clr> will delete all previous commands and outputs and start at the top of the shell
+
+quit-	    quit				Quits the shell
+		      -Entering <quit> will quit the shell
