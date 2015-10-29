@@ -27,18 +27,15 @@ int main(int argc, char *argv[], char **envp)
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
-<<<<<<< HEAD
-        
-=======
     char shell_dir[BUFFER_LEN] = { 0 };
 
-
->>>>>>> refs/remotes/origin/master
     // Parse the commands provided using argc and argv
-    //batchfile condition
+    //batchfile condition; call batch function when there are two arguments (1st is the program name, 2nd is batchfile)
     if ( argc ==2) {
-	batch(argv[1], envp);
-	return EXIT_SUCCESS;
+		//passes the batchfile name and environment variables to batch
+		batch(argv[1], envp);
+		//quit shell when complete
+		return EXIT_SUCCESS;
     }
     // Perform an infinite loop getting command input from users
     getcwd(shell_dir, sizeof(shell_dir));
@@ -89,7 +86,8 @@ int main(int argc, char *argv[], char **envp)
             strcpy(arg, strtok(NULL, " "));
             help(arg);
         }
-	
+		
+		//list all environment variables
 		else if(strcmp(command, "environ") == 0) {
 			environVariable(envp);
 		}

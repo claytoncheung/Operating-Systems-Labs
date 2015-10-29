@@ -53,10 +53,10 @@ char *get_buffer(void)
 
 }
 
-<<<<<<< HEAD
 //Uses envp passed from main function
 int environVariable(char **envp) {
 	char** env = NULL;
+	//prints all environment variables passed from main function
 	for (env = envp; *env != 0; env++)
 	{
 		char* thisEnv = *env;
@@ -65,8 +65,9 @@ int environVariable(char **envp) {
 return EXIT_SUCCESS;
 }
 
-//Uses arguments passed from main function; argument should be the filename
+//Uses arguments passed from main function; argument should be the filename and environment variables
 int batch(char *arg, char **envp) {
+	//Open batch file specified by user
 	FILE *fp = fopen (arg, "r");
 
 	//Holds our command and arguments
@@ -79,6 +80,7 @@ int batch(char *arg, char **envp) {
     strcpy(cmd, strtok(line, "\n"));
 	printf("\n%s\n", line);
 
+	//figure out which command is being called
 	if (strcmp(cmd, "cd") == 0)
         {
 		strcpy(localArg, strtok(NULL, " "));
@@ -100,7 +102,8 @@ int batch(char *arg, char **envp) {
             strcpy(localArg, strtok(NULL, " "));
             help(localArg);
         }
-	
+		
+		//list all environment variables
 		else if(strcmp(cmd, "environ") == 0) {
 			environVariable(envp);
 		}
@@ -128,9 +131,7 @@ int batch(char *arg, char **envp) {
 	return EXIT_SUCCESS;
 }
 
-=======
 //Changes the working directory to the arugment given.
->>>>>>> refs/remotes/origin/master
 int sh_cd(char arg[BUFFER_LEN])
 {
 	char cwd[1024] = { 0 };
