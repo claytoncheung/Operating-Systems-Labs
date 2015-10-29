@@ -29,24 +29,11 @@ int main(int argc, char *argv[], char **envp)
     char arg[BUFFER_LEN] = { 0 };
         
     // Parse the commands provided using argc and argv
-<<<<<<< HEAD
     //batchfile condition
     if ( argc ==2) {
 	batch(argv[1], envp);
 	return EXIT_SUCCESS;
     }
-=======
-    //to invoke with batch file, there should be only one argument which is the name of the batch file
-	//myshell exits after completing the requested commands
-	printf("%d\n",argc);	//for testing
-    if (argc == 2) {		//causing segmentation fault
-		printf("111");
-		batch(argv[1], envp);
-		printf("222");
-		return EXIT_SUCCESS;
-    }
-	printf("333");
->>>>>>> origin/clayton's-branch
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
@@ -96,12 +83,6 @@ int main(int argc, char *argv[], char **envp)
 		else if(strcmp(command, "environ") == 0) {
 			environVariable(envp);
 		}
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> origin/clayton's-branch
-		
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
         {
