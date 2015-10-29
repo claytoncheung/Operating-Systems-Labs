@@ -85,7 +85,16 @@ int main(int argc, char *argv[], char **envp)
         {
             return EXIT_SUCCESS;
         }
-		// ...
+		// echo input
+        else if (strcmp(command, "echo") == 0)
+        {
+            for(int i = 5; i < sizeof(buffer); i++)
+            {
+                arg[i-5] = buffer[i];
+            }
+            printf("%s\n", arg);
+        }
+
 		// n.b.: Add additional batch functions to utility.c		
         // Unsupported command
         else
