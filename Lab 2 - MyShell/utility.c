@@ -15,6 +15,7 @@
 #include "utility.h"
 //#include "myshell.c"
 
+
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
 
@@ -50,6 +51,84 @@ char *get_buffer(void)
 		pos++;
 	}
 
+}
+
+//Uses envp passed from main function
+int environVariable(char **envp) {
+	char** env = NULL;
+	//prints all environment variables passed from main function
+	for (env = envp; *env != 0; env++)
+	{
+		char* thisEnv = *env;
+		printf("%s\n", thisEnv);
+	}
+return EXIT_SUCCESS;
+}
+
+//Uses arguments passed from main function; argument should be the filename and environment variables
+int batch(char *arg, char **envp) {
+	//Open batch file specified by user
+	FILE *fp = fopen (arg, "r");
+
+	//Holds our command and arguments
+	char line[BUFFER_LEN];
+	char cmd[BUFFER_LEN]={0};
+	char localArg[BUFFER_LEN]={0};
+
+	while (fgets(line, BUFFER_LEN, fp) != NULL) {
+	//tokenize line and displays the command
+    strcpy(cmd, strtok(line, "\n"));
+	printf("\n%s\n", line);
+
+	//figure out which command is being called
+	if (strcmp(cmd, "cd") == 0)
+        {
+		strcpy(localArg, strtok(NULL, " "));
+       	sh_cd(localArg);
+        }
+
+        else if(strcmp(cmd, "dir") == 0)
+        {
+        	dir_list();
+        }
+        
+        else if(strcmp(cmd, "pause") == 0)
+        {
+            pause();
+        }
+        
+        else if(strcmp(cmd, "help") == 0)
+        {
+            strcpy(localArg, strtok(NULL, " "));
+            help(localArg);
+        }
+		
+		//list all environment variables
+		else if(strcmp(cmd, "environ") == 0) {
+			environVariable(envp);
+		}
+
+        // quit command -- exit the shell
+        else if (strcmp(cmd, "quit") == 0)
+        {
+            return EXIT_SUCCESS;
+        }
+		/* ADD ANY OTHER ADDITIONAL COMMANDS HERE
+		
+		
+		
+		
+		*/
+        // Unsupported command
+        else
+        {
+            fputs("Unsupported command, use help to display the manual\n", stderr);
+        }
+
+	}
+	
+	fclose(fp);
+	return EXIT_SUCCESS;
 }
 
 //Changes the working directory to the arugment given.

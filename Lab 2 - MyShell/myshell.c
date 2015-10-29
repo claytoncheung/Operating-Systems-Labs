@@ -21,7 +21,7 @@
 
 // Define functions declared in myshell.h here
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **envp)
 {
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
@@ -29,9 +29,14 @@ int main(int argc, char *argv[])
     char arg[BUFFER_LEN] = { 0 };
     char shell_dir[BUFFER_LEN] = { 0 };
 
-
     // Parse the commands provided using argc and argv
-
+    //batchfile condition; call batch function when there are two arguments (1st is the program name, 2nd is batchfile)
+    if ( argc ==2) {
+		//passes the batchfile name and environment variables to batch
+		batch(argv[1], envp);
+		//quit shell when complete
+		return EXIT_SUCCESS;
+    }
     // Perform an infinite loop getting command input from users
     getcwd(shell_dir, sizeof(shell_dir));
     printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);
@@ -81,14 +86,20 @@ int main(int argc, char *argv[])
             strcpy(arg, strtok(NULL, " "));
             help(arg);
         }
-        // other commands here...
-        
+		
+		//list all environment variables
+		else if(strcmp(command, "environ") == 0) {
+			environVariable(envp);
+		}
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
-
+		
+		/*REMEMBER TO ADD ADDITIONAL COMMANDS TO batch FUNCTION IN utility.c*/
+		
+		
         // Unsupported command
         else
         {
