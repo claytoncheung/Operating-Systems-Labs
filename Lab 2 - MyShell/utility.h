@@ -20,7 +20,9 @@
 extern char *get_buffer();
 extern int sh_cd(char arg[BUFFER_LEN]);
 extern int environVariable(char **envp);
-extern int batch(char arg[BUFFER_LEN]]);
+extern int batch(char arg[BUFFER_LEN], char **envp);
 extern int dir_list(void);
+extern int pause(void);
+extern int help(char arg[BUFFER_LEN]);
 
 #endif /* UTILITY_H_ */

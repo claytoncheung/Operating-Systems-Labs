@@ -21,15 +21,23 @@
 
 // Define functions declared in myshell.h here
 
-int main(int argc, char *argv[], char *envp[])
+int main(int argc, char *argv[], char **envp)
 {
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
-
+	printf("1");
     // Parse the commands provided using argc and argv
-
+    
+    //using this to test
+    if (argc >= 1) {
+	printf("2");
+	batch(argv[1], envp);
+	printf("3");
+	return EXIT_SUCCESS;
+    }
+	printf("4");
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
@@ -75,17 +83,17 @@ int main(int argc, char *argv[], char *envp[])
             strcpy(arg, strtok(NULL, " "));
             help(arg);
         }
-		
-		else if(strcmp(command, "environ") == 0) {
-			environVariable(**envp);
-		}
-		
-		//to invoke with batch file, there should be only one argument which is the name of the batch file
-		//myshell exits after completing the requested commands
-		else if (argc == 1) {
-			batch(argv[1]);
-			return EXIT_SUCCESS;
-		}
+	
+	else if(strcmp(command, "environ") == 0) {
+		environVariable(envp);
+	}
+	
+	//to invoke with batch file, there should be only one argument which is the name of the batch file
+	//myshell exits after completing the requested commands
+	/*else if (argc == 1) {
+		batch(argv[1], envp);
+		return EXIT_SUCCESS;
+	}*/
 		
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)

@@ -51,55 +51,57 @@ char *get_buffer(void)
 
 //Uses envp passed from main function
 int environVariable(char **envp) {
-	char** env;
+	char** env = NULL;
+	char* thisEnv = NULL;
 	for (env = envp; *env != 0; env++)
 	{
-		char* thisEnv = *env;
+		thisEnv = *env;
 		printf("%s\n", thisEnv);
 	}
-	return EXIT_SUCCESS;
+return EXIT_SUCCESS;
 }
 
 //Uses arguments passed from main function; argument should be the filename
-int batch(char arg[BUFFER_LEN]) {
+int batch(char arg[BUFFER_LEN], char **envp) {
 	FILE *fp = fopen (arg, "r");
 	
 	//Holds our command and arguments
 	char *line = NULL;
+	char cmd[BUFFER_LEN]={0};
+	char localArg[BUFFER_LEN]={0};	
 	
 	while (fgets(line, BUFFER_LEN, fp) != NULL) {
 		//tokenize line
-        strcpy(command, strtok(line, " "));
-		
-		if (strcmp(command, "cd") == 0)
+        strcpy(cmd, strtok(line, " "));
+	
+	if (strcmp(cmd, "cd") == 0)
         {
-=            strcpy(arg, strtok(NULL, " "));
-        	sh_cd(arg);
-
+		strcpy(arg, strtok(NULL, " "));
+        	sh_cd(localArg);
         }
 
-        else if(strcmp(command, "dir") == 0)
+        else if(strcmp(cmd, "dir") == 0)
         {
         	dir_list();
         }
         
-        else if(strcmp(command, "pause") == 0)
+        else if(strcmp(cmd, "pause") == 0)
         {
             pause();
         }
         
-        else if(strcmp(command, "help") == 0)
+        else if(strcmp(cmd, "help") == 0)
         {
             strcpy(arg, strtok(NULL, " "));
-            help(arg);
+            help(localArg);
         }
-		
-		else if(strcmp(command, "environ") == 0) {
-			environVariable(**envp);
-		}
-		        
+	
+	else if(strcmp(cmd, "environ") == 0) {
+		environVariable(envp);
+	}
+
         // quit command -- exit the shell
-        else if (strcmp(command, "quit") == 0)
+        else if (strcmp(cmd, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
