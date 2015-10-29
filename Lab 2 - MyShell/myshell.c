@@ -41,20 +41,17 @@ int main(int argc, char *argv[], char **envp)
     getcwd(shell_dir, sizeof(shell_dir));
     printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);
 
+    char cwd[1024] = { 0 };
+    getcwd(cwd, sizeof(cwd));
+
+    printf("%s > ", cwd);
+
 
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
-
-        char cwd[1024] = { 0 };
-        getcwd(cwd, sizeof(cwd));
-
-        printf("%s > ", cwd);
-
-        strcpy(buffer, get_buffer());
         printf("%s\n", buffer);
         strcpy(command, strtok(buffer, " "));
-
     /*********************************/
     /********* ARG ONLY TAKEN ********/
     /********* WHEN NEEDED BY ********/
@@ -65,10 +62,8 @@ int main(int argc, char *argv[], char **envp)
         // cd command -- change the current directory
         if (strcmp(command, "cd") == 0)
         {
-            if (strtok(NULL,"")!=NULL){
             strcpy(arg, strtok(NULL, " "));
         	sh_cd(arg);
-            }
         }
 
         else if(strcmp(command, "dir") == 0)
@@ -83,12 +78,8 @@ int main(int argc, char *argv[], char **envp)
         
         else if(strcmp(command, "help") == 0)
         {
-            if (strtok(NULL,"")!=NULL){
-                strcpy(arg, strtok(NULL, " "));
-                help(arg);
-            }
-            else
-                help("");
+            strcpy(arg, strtok(NULL, " "));
+            help(arg);
         }
 		
 		//list all environment variables
@@ -107,8 +98,10 @@ int main(int argc, char *argv[], char **envp)
         // Unsupported command
         else
         {
-            fputs("Unsupported command, use help to display the manual", stderr);
+            fputs("Unsupported command, use help to display the manual\n", stderr);
         }
+        getcwd(cwd, sizeof(cwd));
+        printf("%s > ", cwd);
     }
     return EXIT_SUCCESS;
 }

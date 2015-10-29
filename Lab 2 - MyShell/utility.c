@@ -19,40 +19,6 @@
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
 
-//Takes in command from terminal prompt, including whitespace
-char *get_buffer(void)
-{
-	char buffer[BUFFER_LEN];
-	int pos = 0;
-	int c;
-
-	//Throws an error if the buffer is empty
-	if(!buffer)
-	{
-		fprintf(stderr, "Shell; Allocation Error\n");
-		exit(EXIT_FAILURE);
-	}
-
-	//Continously loops until told to return a value
-	while(1)
-	{
-		//takes the iput character by character and stores as an integer, then reconstructs the input as a string. Returns string to call
-		c=getchar();
-
-		if(c==EOF||c=='\n')
-		{
-			buffer[pos] = '\0';
-			return buffer;
-		}
-		else
-		{
-			buffer[pos] = c;
-		}
-		pos++;
-	}
-
-}
-
 //Uses envp passed from main function
 int environVariable(char **envp) {
 	char** env = NULL;
@@ -196,6 +162,7 @@ int help(char arg[BUFFER_LEN])
 	//If 'more' is entered after 'help'
 	if(strcmp(arg, "more") == 0)
 	{
+		puts("1");
 		//Opens the 'helpmore' file
 		FILE *fp = fopen("helpmore.txt", "r");
 
@@ -211,6 +178,7 @@ int help(char arg[BUFFER_LEN])
 
 	else
 	{
+
 		//Opens the 'help' file
 		FILE *fp = fopen("help.txt", "r");
 
