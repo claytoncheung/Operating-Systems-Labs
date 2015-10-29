@@ -42,7 +42,7 @@ Name			              Student Number
 Malek Mustapha-Abdullah	100541476
 Clayton Cheung
 Neil Ramdath
-Dominick Mancini		
+Dominick Mancini		    100517944
 Scott McLean
 
 COPYRIGHT
