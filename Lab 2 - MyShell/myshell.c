@@ -27,7 +27,13 @@ int main(int argc, char *argv[], char **envp)
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
+<<<<<<< HEAD
         
+=======
+    char shell_dir[BUFFER_LEN] = { 0 };
+
+
+>>>>>>> refs/remotes/origin/master
     // Parse the commands provided using argc and argv
     //batchfile condition
     if ( argc ==2) {
@@ -35,6 +41,10 @@ int main(int argc, char *argv[], char **envp)
 	return EXIT_SUCCESS;
     }
     // Perform an infinite loop getting command input from users
+    getcwd(shell_dir, sizeof(shell_dir));
+    printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);
+
+
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument
