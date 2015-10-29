@@ -65,10 +65,10 @@ int main(int argc, char *argv[], char **envp)
         // cd command -- change the current directory
         if (strcmp(command, "cd") == 0)
         {
-            // your code here
+            if (strtok(NULL,"")!=NULL){
             strcpy(arg, strtok(NULL, " "));
         	sh_cd(arg);
-
+            }
         }
 
         else if(strcmp(command, "dir") == 0)
@@ -83,8 +83,12 @@ int main(int argc, char *argv[], char **envp)
         
         else if(strcmp(command, "help") == 0)
         {
-            strcpy(arg, strtok(NULL, " "));
-            help(arg);
+            if (strtok(NULL,"")!=NULL){
+                strcpy(arg, strtok(NULL, " "));
+                help(arg);
+            }
+            else
+                help("");
         }
 		
 		//list all environment variables
