@@ -12,6 +12,7 @@
 #include "myshell.h"
 
 
+
 // Include your relevant functions declarations here they must start with the
 // extern keyword such as in the following example:
 // extern void display_help(void);
@@ -20,7 +21,9 @@
 extern char *get_buffer();
 extern int sh_cd(char arg[BUFFER_LEN]);
 extern int environVariable(char **envp);
-extern int batch(char arg[BUFFER_LEN]]);
+extern int batch(char *arg, char **envp);
 extern int dir_list(void);
+extern int pause(void);
+extern int help(char arg[BUFFER_LEN]);
 
 #endif /* UTILITY_H_ */

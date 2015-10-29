@@ -57,49 +57,51 @@ int environVariable(char **envp) {
 		char* thisEnv = *env;
 		printf("%s\n", thisEnv);
 	}
-	return EXIT_SUCCESS;
+return EXIT_SUCCESS;
 }
 
 //Uses arguments passed from main function; argument should be the filename
-int batch(char arg[BUFFER_LEN]) {
+int batch(char *arg, char **envp) {
 	FILE *fp = fopen (arg, "r");
-	
-	//Holds our command and arguments
-	char *line = NULL;
-	
-	while (fgets(line, BUFFER_LEN, fp) != NULL) {
-		//tokenize line
-        strcpy(command, strtok(line, " "));
-		
-		if (strcmp(command, "cd") == 0)
-        {
-=            strcpy(arg, strtok(NULL, " "));
-        	sh_cd(arg);
 
+	//Holds our command and arguments
+	char line[BUFFER_LEN];
+	char cmd[BUFFER_LEN]={0};
+	char localArg[BUFFER_LEN]={0};
+
+	while (fgets(line, BUFFER_LEN, fp) != NULL) {
+	//tokenize line and displays the command
+    strcpy(cmd, strtok(line, "\n"));
+	printf("\n%s\n", line);
+
+	if (strcmp(cmd, "cd") == 0)
+        {
+		strcpy(localArg, strtok(NULL, " "));
+        	sh_cd(localArg);
         }
 
-        else if(strcmp(command, "dir") == 0)
+        else if(strcmp(cmd, "dir") == 0)
         {
         	dir_list();
         }
         
-        else if(strcmp(command, "pause") == 0)
+        else if(strcmp(cmd, "pause") == 0)
         {
             pause();
         }
         
-        else if(strcmp(command, "help") == 0)
+        else if(strcmp(cmd, "help") == 0)
         {
-            strcpy(arg, strtok(NULL, " "));
-            help(arg);
+            strcpy(localArg, strtok(NULL, " "));
+            help(localArg);
         }
-		
-		else if(strcmp(command, "environ") == 0) {
-			environVariable(**envp);
+	
+		else if(strcmp(cmd, "environ") == 0) {
+			environVariable(envp);
 		}
-		        
+
         // quit command -- exit the shell
-        else if (strcmp(command, "quit") == 0)
+        else if (strcmp(cmd, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
@@ -112,7 +114,7 @@ int batch(char arg[BUFFER_LEN]) {
         // Unsupported command
         else
         {
-            fputs("Unsupported command, use help to display the manual", stderr);
+            fputs("Unsupported command, use help to display the manual\n", stderr);
         }
 
 	}
