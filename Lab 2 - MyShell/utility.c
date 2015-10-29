@@ -16,75 +16,82 @@
 //#include "myshell.c"
 
 
-// Define your utility functions here, these will most likely be functions that you call
-// in your myshell.c source file
+// Declare function prototypes in utility.h
+// Put functions in this file.
 
-//Uses envp passed from main function
-int environVariable(char **envp) {
+//...........................................................................................................................................................................
+int environVariable(char **envp) 
+{
+
+	// Local environment variable
 	char** env = NULL;
-	//prints all environment variables passed from main function
+
+	// Loop through environment pointer argument, if it's not zero, continue.
 	for (env = envp; *env != 0; env++)
 	{
+		// Iterate through environment variables and display them.
 		char* thisEnv = *env;
 		printf("%s\n", thisEnv);
 	}
 return EXIT_SUCCESS;
 }
 
-//Uses arguments passed from main function; argument should be the filename and environment variables
-int batch(char *arg, char **envp) {
-	//Open batch file specified by user
+//...........................................................................................................................................................................
+int batch(char *arg, char **envp) 
+{
+
+	// Open filename specified by the user
 	FILE *fp = fopen (arg, "r");
 
-	//Holds our command and arguments
+	// Declare major variables
 	char line[BUFFER_LEN];
 	char cmd[BUFFER_LEN]={0};
 	char localArg[BUFFER_LEN]={0};
 
-	while (fgets(line, BUFFER_LEN, fp) != NULL) {
-	//tokenize line and displays the command
-    strcpy(cmd, strtok(line, "\n"));
-	printf("\n%s\n", line);
-
-	//figure out which command is being called
-	if (strcmp(cmd, "cd") == 0)
-        {
+	// Loop as long as there is text entered in the shell.
+	while (fgets(line, BUFFER_LEN, fp) != NULL) 
+	{
+		// Tokenize line and displays the command
+		// also capture any arguments if we have any.
+	  	strcpy(cmd, strtok(line, "\n"));
+		printf("\n%s\n", line);
 		strcpy(localArg, strtok(NULL, " "));
-       	sh_cd(localArg);
-        }
 
-        else if(strcmp(cmd, "dir") == 0)
+		//figure out which command is being called
+		
+		// Change directory
+		if (strcmp(cmd, "cd") == 0)
+        {
+       		sh_cd(localArg);
+        }
+        // List directory
+        else if (strcmp(cmd, "dir") == 0)
         {
         	dir_list();
         }
-        
+        // Pause execution
         else if(strcmp(cmd, "pause") == 0)
         {
             pause();
         }
-        
+        // Display help
         else if(strcmp(cmd, "help") == 0)
         {
-            strcpy(localArg, strtok(NULL, " "));
             help(localArg);
         }
-		
-		//list all environment variables
-		else if(strcmp(cmd, "environ") == 0) {
+		// List all environment variables
+		else if(strcmp(cmd, "environ") == 0) 
+		{
 			environVariable(envp);
 		}
-
-        // quit command -- exit the shell
+        // Exit the shell
         else if (strcmp(cmd, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
-		/* ADD ANY OTHER ADDITIONAL COMMANDS HERE
-		
-		
-		
-		
-		*/
+        //...
+
+
         // Unsupported command
         else
         {
@@ -93,13 +100,15 @@ int batch(char *arg, char **envp) {
 
 	}
 	
+	// Close the file and exit
 	fclose(fp);
 	return EXIT_SUCCESS;
 }
 
-//Changes the working directory to the arugment given.
+//...........................................................................................................................................................................
 int sh_cd(char arg[BUFFER_LEN])
 {
+	// cwd - current working directory
 	char cwd[1024] = { 0 };
 	getcwd(cwd, sizeof(cwd));
 	if(arg == NULL)
@@ -119,7 +128,7 @@ int sh_cd(char arg[BUFFER_LEN])
 	return EXIT_SUCCESS;
 }
 
-//Lists directory contents.
+//...........................................................................................................................................................................
 int dir_list(void)
 {
 	//Structs from the unistd.h library for listing the directory
@@ -138,7 +147,7 @@ int dir_list(void)
 	}
 	return EXIT_SUCCESS;
 }
-
+//...........................................................................................................................................................................
 int pause(void)
 {
 	printf("**Execution Paused**\n");
@@ -146,51 +155,29 @@ int pause(void)
 	//Pauses execution of program until Enter is pressed
 	fprintf(stderr, "Press [Enter] to continue...");
 	
-	//Gets user input
+	//Get user input and return
 	getchar();
-
-	//Returns to main program
 	return EXIT_SUCCESS;
-
 }
-
+//...........................................................................................................................................................................
 int help(char arg[BUFFER_LEN])
 {
-
+	// Declare major variables
+	// If argument is "more", open helpmore.txt, otherwise open help.txt
 	char ch;
+	char* helpfile = strcmp(arg, "more") == 0 ? "helpmore.txt" : "help.txt";
 
-	//If 'more' is entered after 'help'
-	if(strcmp(arg, "more") == 0)
+	FILE *fp = fopen(helpfile, "r");
+
+	//While the end of the file is not reached
+	while( (ch = fgetc(fp) ) != EOF )
 	{
-		puts("1");
-		//Opens the 'helpmore' file
-		FILE *fp = fopen("helpmore.txt", "r");
-
-		//While the end of the file is not reached
-		while( (ch = fgetc(fp) ) != EOF )
-		{
-			//Prints the contents of the 'helpmore' file
-			printf("%c", ch);
-		}
-		fclose(fp);
+		//Prints the contents of the opened file
+		printf("%c", ch);
 	}
-	
-
-	else
-	{
-
-		//Opens the 'help' file
-		FILE *fp = fopen("help.txt", "r");
-
-		//While the end of the file is not reached
-		while( (ch = fgetc(fp)) != EOF )
-		{
-			//Prints the contents of the 'help' file
-			printf("%c", ch);
-		}
-		fclose(fp);	
-	}
-	
+		
+	fclose(fp);	
 	printf("\n");
 	return EXIT_SUCCESS;
 }
+//...........................................................................................................................................................................
