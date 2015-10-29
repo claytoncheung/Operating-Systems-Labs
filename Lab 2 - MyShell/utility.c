@@ -51,20 +51,26 @@ char *get_buffer(void)
 
 //Uses envp passed from main function
 int environVariable(char **envp) {
-	char** env;
+	char** env = NULL;
+	char* thisEnv = NULL;
 	for (env = envp; *env != 0; env++)
 	{
-		char* thisEnv = *env;
+		thisEnv = *env;
 		printf("%s\n", thisEnv);
 	}
 return EXIT_SUCCESS;
 }
 
 //Uses arguments passed from main function; argument should be the filename
+<<<<<<< HEAD
 int batch(char *arg, char **envp) {
+=======
+int batch(char arg[BUFFER_LEN], char **envp) {
+>>>>>>> origin/clayton's-branch
 	FILE *fp = fopen (arg, "r");
 
 	//Holds our command and arguments
+<<<<<<< HEAD
 	char line[BUFFER_LEN];
 	char cmd[BUFFER_LEN]={0};
 	char localArg[BUFFER_LEN]={0};
@@ -77,6 +83,19 @@ int batch(char *arg, char **envp) {
 	if (strcmp(cmd, "cd") == 0)
         {
 		strcpy(localArg, strtok(NULL, " "));
+=======
+	char *line = NULL;
+	char cmd[BUFFER_LEN]={0};
+	char localArg[BUFFER_LEN]={0};	
+	
+	while (fgets(line, BUFFER_LEN, fp) != NULL) {
+		//tokenize line
+        strcpy(cmd, strtok(line, " "));
+	
+	if (strcmp(cmd, "cd") == 0)
+        {
+		strcpy(arg, strtok(NULL, " "));
+>>>>>>> origin/clayton's-branch
         	sh_cd(localArg);
         }
 
@@ -92,6 +111,7 @@ int batch(char *arg, char **envp) {
         
         else if(strcmp(cmd, "help") == 0)
         {
+<<<<<<< HEAD
             strcpy(localArg, strtok(NULL, " "));
             help(localArg);
         }
@@ -99,6 +119,15 @@ int batch(char *arg, char **envp) {
 		else if(strcmp(cmd, "environ") == 0) {
 			environVariable(envp);
 		}
+=======
+            strcpy(arg, strtok(NULL, " "));
+            help(localArg);
+        }
+	
+	else if(strcmp(cmd, "environ") == 0) {
+		environVariable(envp);
+	}
+>>>>>>> origin/clayton's-branch
 
         // quit command -- exit the shell
         else if (strcmp(cmd, "quit") == 0)

@@ -21,7 +21,11 @@
 extern char *get_buffer();
 extern int sh_cd(char arg[BUFFER_LEN]);
 extern int environVariable(char **envp);
+<<<<<<< HEAD
 extern int batch(char *arg, char **envp);
+=======
+extern int batch(char arg[BUFFER_LEN], char **envp);
+>>>>>>> origin/clayton's-branch
 extern int dir_list(void);
 extern int pause(void);
 extern int help(char arg[BUFFER_LEN]);
