@@ -9,7 +9,7 @@ OS Fall 2015 Labs
 
 ~~**environ**~~ - (*Clayton*) List all environment strings
 
-**echo `comment`** - (*Neil*) Display `comment` followed by new line (spaces/tabs may be reduced to single space)
+~~**echo `comment`** - (*Neil*) Display `comment` followed by new line (spaces/tabs may be reduced to single space)~~
 
 ~~**help**~~ - (*Malek*) Display the user manual using the `more` filter
 
