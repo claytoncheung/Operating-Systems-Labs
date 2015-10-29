@@ -39,10 +39,10 @@ CONTRIBUTORS
 ------------
 
 Name			              Student Number
-Malek Mustapha-Abdullah	100541476
+Malek Mustapha-Abdullah 100541476
 Clayton Cheung
 Neil Ramdath
-Dominick Mancini		    100517944
+Dominick Mancini        100517944
 Scott McLean
 
 COPYRIGHT
