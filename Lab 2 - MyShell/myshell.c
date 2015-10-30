@@ -83,6 +83,7 @@ int main(int argc, char *argv[], char **envp)
         // Exit
         else if (strcmp(command, "quit") == 0)
         {
+            exit(0); 
             return EXIT_SUCCESS;
         }
 		// echo input
