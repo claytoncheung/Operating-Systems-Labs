@@ -29,5 +29,7 @@ extern int dir_list(void);
 extern int pause(void);
 // Display help file. if char arg is "more", will open more help
 extern int help(char arg[BUFFER_LEN]);
+// Clear the screen
+extern int clr(void);
 
 #endif /* UTILITY_H_ */

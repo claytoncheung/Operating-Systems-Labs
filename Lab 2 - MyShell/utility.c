@@ -87,6 +87,7 @@ int batch(char *arg, char **envp)
         // Exit the shell
         else if (strcmp(cmd, "quit") == 0)
         {
+        	fclose(fp);
             return EXIT_SUCCESS;
         }
         //...
@@ -181,3 +182,8 @@ int help(char arg[BUFFER_LEN])
 	return EXIT_SUCCESS;
 }
 //...........................................................................................................................................................................
+int clr(void)
+{
+	system("clear");
+	return EXIT_SUCCESS;
+}
