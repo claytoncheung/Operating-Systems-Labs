@@ -14,76 +14,98 @@
 #include "utility.h"
 #include "myshell.h"
 
-// Put macros or constants here using #define
-//#define BUFFER_LEN 256
+// Macros and constants here, eg: #define BUFFER_LEN 256
+// Globals here, eg: char* abc = "abc";
 
-// Put global environment variables here
 
-// Define functions declared in myshell.h here
-
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **envp)
 {
-    // Input buffer and and commands
+    // Declare major variables
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
     char shell_dir[BUFFER_LEN] = { 0 };
+    char cwd[1024] = { 0 };
 
+    // batchfile condition; call batch function when there are two arguments (1st is the program name, 2nd is batchfile)
+    if (argc == 2) 
+    {
+		//passes the batchfile name and environment variables to batch, then quit.
+		batch(argv[1], envp);
+		return EXIT_SUCCESS;
+    }
 
-    // Parse the commands provided using argc and argv
-
-    // Perform an infinite loop getting command input from users
+    // get current working directory, store this in shell_dir, and display
     getcwd(shell_dir, sizeof(shell_dir));
-    printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);
+    printf("Shell = %s\nCopyright (c) 2015\n\n", shell_dir);    
+    getcwd(cwd, sizeof(cwd));
 
+    // Prompt user
+    printf("%s > ", cwd);
 
+    // Loop through user commands indefinitely
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
-        // Perform string tokenization to get the command and argument
-
-        char cwd[1024] = { 0 };
-        getcwd(cwd, sizeof(cwd));
-
-        printf("%s > ", cwd);
-
-        strcpy(buffer, get_buffer());
+        // Echo input back to user
         printf("%s\n", buffer);
+
+        // Perform string tokenization to get command and arguments.
         strcpy(command, strtok(buffer, " "));
 
-    /*********************************/
-    /********* ARG ONLY TAKEN ********/
-    /********* WHEN NEEDED BY ********/
-    /*********    COMMAND     ********/
-    /*********************************/
-
-        // Check the command and execute the operations for each command
-        // cd command -- change the current directory
-        if (strcmp(command, "cd") == 0)
+        // Execute the command entered by the user
+        // Display environment variables
+        if(strcmp(command, "environ") == 0) 
         {
-            // your code here
+            environVariable(envp);
+        }
+        // Change directory
+        else if (strcmp(command, "cd") == 0)
+        {
             strcpy(arg, strtok(NULL, " "));
         	sh_cd(arg);
-
         }
-
+        // List current directory
         else if(strcmp(command, "dir") == 0)
         {
         	dir_list();
         }
-
-        // other commands here...
-        
-        // quit command -- exit the shell
+        // Pause execution
+        else if(strcmp(command, "pause") == 0)
+        {
+            pause();
+        }
+        // Display help file.
+        else if(strcmp(command, "help") == 0)
+        {
+            strcpy(arg, strtok(NULL, " "));
+            help(arg);
+        }
+        // Exit
         else if (strcmp(command, "quit") == 0)
         {
+            exit(0); 
             return EXIT_SUCCESS;
         }
+		// echo input
+        else if (strcmp(command, "echo") == 0)
+        {
+            for(int i = 5; i < sizeof(buffer); i++)
+            {
+                arg[i-5] = buffer[i];
+            }
+            printf("%s\n", arg);
+        }
 
+		// n.b.: Add additional batch functions to utility.c		
         // Unsupported command
         else
         {
             fputs("Unsupported command, use help to display the manual\n", stderr);
         }
+
+        // Finished running command, update current working directory and prompt user.
+        getcwd(cwd, sizeof(cwd));
+        printf("%s > ", cwd);
     }
     return EXIT_SUCCESS;
 }
