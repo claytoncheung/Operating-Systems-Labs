@@ -1,5 +1,5 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
+CC = clang
+CFLAGS = -Wall -Wextra -std=c99 -lpthread
 LFLAGS =
 LIBS = -lm
 SOURCES = sudoku.c solver.c validator.c

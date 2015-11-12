@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "validator.h"
 #include "solver.h"
 const char* puzzleFile = "solved.txt";
 
 int main(void){
 	int puzzle[9][9];
+	int duplicates;
 
 	FILE *fp = fopen(puzzleFile, "r");
 	//Reads the sudoku numbers from puzzle.txt
@@ -20,6 +22,9 @@ int main(void){
 
 	//Put solver calls here
 	sudoku_helper(puzzle, 0, 0);
+
+	duplicates = validateAll(puzzle[][]);
+
 	FILE *solved = fopen("solved_puzzle.txt", "w");
 	for(int i = 0; i <9; i++)
 	{
