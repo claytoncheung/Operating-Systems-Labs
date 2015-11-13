@@ -16,10 +16,11 @@ void *checkRow(void *arg){
 	ins_sort(temp);
 
 	//Critical Section starts
-	pthread_mutex_lock(&mutex);
-	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0)
+	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0){
+		pthread_mutex_lock(&mutex);
 		valid = 0;
-	pthread_mutex_unlock(&mutex);
+		pthread_mutex_unlock(&mutex);
+	}
 	//Critical Section ends
 
 	pthread_exit(NULL);
@@ -32,10 +33,11 @@ void *checkColumn(void *arg){
 	ins_sort(temp);
 
 	//Critical Section starts
-	pthread_mutex_lock(&mutex);
-	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0)
+	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0){
+		pthread_mutex_lock(&mutex);
 		valid = 0;
-	pthread_mutex_unlock(&mutex);
+		pthread_mutex_unlock(&mutex);
+	}
 	//Critical Section ends
 
 	pthread_exit(NULL);
@@ -49,11 +51,11 @@ void *checkBox(void *arg){
 	ins_sort(temp);
 
 	//Critical Section starts
-	pthread_mutex_lock(&mutex);
-	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0)
+	if (memcmp(temp, checkArray, (9*sizeof(int)))!=0){
+		pthread_mutex_lock(&mutex);
 		valid = 0;
-
-	pthread_mutex_unlock(&mutex);
+		pthread_mutex_unlock(&mutex);
+	}
 	//Critical Section ends
 
 	pthread_exit(NULL);
