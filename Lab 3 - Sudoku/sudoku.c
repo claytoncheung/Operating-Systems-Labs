@@ -3,11 +3,11 @@
 #include <pthread.h>
 #include "validator.h"
 #include "solver.h"
-const char* puzzleFile = "solved.txt";
+const char* puzzleFile = "puzzle.txt";
 
 int main(void){
 	int puzzle[9][9];
-	int duplicates;
+	int duplicates = 1;
 
 	FILE *fp = fopen(puzzleFile, "r");
 	//Reads the sudoku numbers from puzzle.txt
@@ -18,12 +18,15 @@ int main(void){
 	}
 
 	fclose(fp);
-	//Put validator calls here
 
-	//Put solver calls here
 	sudoku_helper(puzzle, 0, 0);
 
-	duplicates = validateAll(puzzle[][]);
+	duplicates = validateAll(puzzle);
+
+	if (duplicates == 1)
+		printf("The puzzle is valid, there are no duplicates\n");
+	else if (duplicates == 0)
+		printf("The puzzle contains duplicates \n");
 
 	FILE *solved = fopen("solved_puzzle.txt", "w");
 	for(int i = 0; i <9; i++)
