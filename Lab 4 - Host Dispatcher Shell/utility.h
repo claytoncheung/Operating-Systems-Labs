@@ -1,5 +1,5 @@
-/*
- * Host Dispatcher Shell Project for SOFE 3950U / CSCI 3020U: Operating Systems
+
+ /* Host Dispatcher Shell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
  * Copyright (C) 2015, <GROUP MEMBERS>
  * All rights reserved.
@@ -13,19 +13,30 @@
 
 // Resources structure containing integers for each resource constraint and an
 // array of 1024 for the memory
-// typedef struct {
-//  ...
-//  ...
-// } resources;
+typedef struct {
+ int max_printers = 2;
+ int max_scanner = 1;
+ int max_modems = 1;
+ int max_cd = 3;
+ int max_memory[MEMORY] = { 0 };
+} resources;
 
 
 // Processes structure containing all of the process details parsed from the 
 // input file, should also include the memory address (an index) which indicates
 // where in the resources memory array its memory was allocated
-// typedef struct {
-//  ...
-//  ...
-// } process;
+typedef struct {
+ 	int arrival_time;
+ 	int priority;
+ 	int processor_time;
+ 	int Mbytes;
+ 	int num_printers;
+ 	int num_scanners;
+ 	int num_modems;
+ 	int num_cds;
+} process;
+
+//Node struct for linked list. Processes will be added to the linked list as a node.
 
 
 // Include your relevant functions declarations here they must start with the 
@@ -34,16 +45,15 @@
 // Function to allocate a contiguous chunk of memory in your resources structure
 // memory array, always make sure you leave the last 64 values (64 MB) free, should
 // return the index where the memory was allocated at
-// extern int alloc_mem(resources res, int size);
+extern int alloc_mem(resources res, int size);
 
 // Function to free the allocated contiguous chunk of memory in your resources
 // structure memory array, should take the resource struct, start index, and 
 // size (amount of memory allocated) as arguments
-// extern free_mem(resources res, int index, int size);
+extern void free_mem(resources res, int index, int size);
 
 // Function to parse the file and initialize each process structure and add
 // it to your job dispatch list queue (linked list)
-// extern void load_dispatch(char *dispatch_file, node_t *queue);
-
+extern void load_dispatch(char *dispatch_file, node_t *queue);
 
 #endif /* UTILITY_H_ */

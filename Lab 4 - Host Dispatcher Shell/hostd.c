@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
     // ==================== YOUR CODE HERE ==================== //
     
     // Load the dispatchlist
+    ////**Note from Nick**
+    ////File opening/closing is managed inside of the load_dispatch function
+    ////please specify the dispatchlist only by its name as a character array
+
     
     // Add each process structure instance to the job dispatch list queue
 
