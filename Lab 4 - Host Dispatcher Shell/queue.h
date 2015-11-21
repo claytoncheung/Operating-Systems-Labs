@@ -31,11 +31,11 @@ typedef struct node
  **********************************************************************/
 
 // pushes new process onto specified queue, or adds them to the end of the queue, rather.
-extern void push(proc process, node_t *head);
+extern void push(process proc, node_t *head);
 
 // pops the first process, head is the name of the queue, when calling the function
 // call as pop(&head), instead of pop(head), you will get compile errors otherwise
-extern proc pop(node_t **head);
+extern process pop(node_t **head);
 
 
 #endif /* QUEUE_H_ */
