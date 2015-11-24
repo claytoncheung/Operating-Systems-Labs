@@ -54,6 +54,8 @@ bool request_res(int n_customer, int request[])
         else
         {
             perror("Process request exceeds max needs.");
+            rquest = false;
+            break;
         }
         return rquest;
      }
@@ -64,7 +66,27 @@ bool request_res(int n_customer, int request[])
 // Release resources, returns true if successful
 bool release_res(int n_customer, int release[])
 {
-     bool release = false;
+    bool rlease = false;
+
+    for(int i = 0; i < sizeof(release); i++)
+    {
+        if(release[i] <= bank.allocation[n_customer][i])
+        {
+            bank.available[i] += release[i];
+            if(safe_state(n_customer))
+            {
+                rlease = true;
+            }
+        }
+        else
+        {
+            perror("Releasing too many resources. Aborting...")
+            rlease = false;
+            break;
+        }
+    }
+
+    return rlease;
 }
 
 //makes sure a safe state exists
