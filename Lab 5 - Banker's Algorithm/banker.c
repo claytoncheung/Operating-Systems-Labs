@@ -36,7 +36,18 @@ bool request_res(int n_customer, int request[])
                 bank.available[i] -= request[i];
                 bank.allocation[n_customer[i] += request[i];
                 bank.need[n_customer][i] -= request[i];
-                rquest = true;
+                if(safe_state(n_customer))
+                {
+                    rquest = true;
+                }
+                else
+                {
+                    bank.available += request[i];
+                    bank.allocation[n_customer][i] -= request[i];
+                    bank.need[n_customer][i] += request[i];
+
+                }
+                
             }
 
         }
@@ -72,14 +83,14 @@ bool safe_state(int n_customer)
 
     for(int j = 0; j < sizeof(finish); j++)
     {
-        if(!finish[i] && bank.need[n_customer][i] <= work[i])
+        if(!finish[j] && bank.need[n_customer][j] <= work[j])
         {
-            work[i] += allocation[n_customer][i];
-            finish[i] = true;
+            work[j] += allocation[n_customer][j];
+            finish[j] = true;
         }
     }
 
-    
+    //If ANY value of finish is false, then the system is not in a safe state
     for(int i = 0; i < sizeof(finish); i++)
     {
         if(finish[i] == false)
@@ -108,7 +119,6 @@ int main(int argc, char *argv[])
     // Allocate the available resources
 
     // Initialize the pthreads, locks, mutexes, etc.
-    pthread_t pth[NUM_CUSTOMERS];
 
     // Run the threads and continually loop
 
