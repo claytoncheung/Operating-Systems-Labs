@@ -14,46 +14,101 @@
 
 // Put any other macros or constants here using #define
 // May be any values >= 0
-#define NUM_CUSTOMERS 5
-#define NUM_RESOURCES 3
+#define NUM_CUSTOMERS 5 //n
+#define NUM_RESOURCES 3 //m
 
-
-// Put global environment variables here
-// Available amount of each resource
-int available[NUM_RESOURCES];
-
-// Maximum demand of each customer
-int maximum[NUM_CUSTOMERS][NUM_RESOURCES];
-
-// Amount currently allocated to each customer
-int allocation[NUM_CUSTOMERS][NUM_RESOURCES];
-
-// Remaining need of each customer
-int need[NUM_CUSTOMERS][NUM_RESOURCES];
+banker bank;
 
 
 // Define functions declared in banker.h here
-// bool request_res(int n_customer, int request[])
-// {
-//      ...
-// }
+bool request_res(int n_customer, int request[])
+{
+     //Available = 1, Unavailable = 0
+     bool rquest = false;
+     for(int i = 0; i < sizeof(request); i++)
+     {
+        if(request[i] <= bank.need[n_customer][i])
+        {
+
+            while(request[i] > bank.available[i]);
+            if(request[i] <= bank.available[i])
+            {
+                bank.available[i] -= request[i];
+                bank.allocation[n_customer[i] += request[i];
+                bank.need[n_customer][i] -= request[i];
+                rquest = true;
+            }
+
+        }
+        else
+        {
+            perror("Process request exceeds max needs.");
+        }
+        return rquest;
+     }
+
+   
+}
 
 // Release resources, returns true if successful
-// bool release_res(int n_customer, int release[])
-// {
-//      ...
-// }
+bool release_res(int n_customer, int release[])
+{
+     bool release = false;
+}
 
+//makes sure a safe state exists
+bool safe_state(int n_customer)
+{
+    bool safe = true;
+    int work[NUM_RESOURCES];
+
+    memcpy(work, bank.available, sizeof(bank.available));
+
+    bool finish[NUM_CUSTOMERS];
+    for(int i = 0; i < sizeof(finish); i++)
+    {
+        finish[i] = false;
+    }
+
+    for(int j = 0; j < sizeof(finish); j++)
+    {
+        if(!finish[i] && bank.need[n_customer][i] <= work[i])
+        {
+            work[i] += allocation[n_customer][i];
+            finish[i] = true;
+        }
+    }
+
+    
+    for(int i = 0; i < sizeof(finish); i++)
+    {
+        if(finish[i] == false)
+        {
+            safe = false;
+            break;
+        }
+    }
+
+    return safe;
+
+}
 
 int main(int argc, char *argv[])
 {
     // ==================== YOUR CODE HERE ==================== //
 
     // Read in arguments from CLI, NUM_RESOURCES is the number of arguments   
+    for(int i = 0; i<NUM_RESOURCES; i++)
+    {
+        sscanf(argv[i+1], "%d", &(bank.available[i]));
+    }
     
+
+
     // Allocate the available resources
 
     // Initialize the pthreads, locks, mutexes, etc.
+    pthread_t pth[NUM_CUSTOMERS];
 
     // Run the threads and continually loop
 
