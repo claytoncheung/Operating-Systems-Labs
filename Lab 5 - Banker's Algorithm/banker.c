@@ -17,7 +17,7 @@
 #define NUM_CUSTOMERS 5 //n
 #define NUM_RESOURCES 3 //m
 
-banker bank;
+banker bank;    //Bank struct (keeps all arrays together in one object)
 
 
 // Define functions declared in banker.h here
