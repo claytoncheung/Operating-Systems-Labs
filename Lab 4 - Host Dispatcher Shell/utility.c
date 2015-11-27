@@ -38,7 +38,7 @@ int alloc_mem(resources res, int size)
     if((free_space - size) < 64)
     {
     	perror("OUT OF MEMORY, UNABLE TO ALLOCATE: ");
-    	return 1;
+    	return -1;
     	break;
     }
 
@@ -105,7 +105,7 @@ void load_dispatch(char *dispatch_file, node_t *queue)
 	 	proc.num_scanners = atoi(strtok(NULL, ", "));
 	 	proc.num_modems = atoi(strtok(NULL, ", "));
 	 	proc.num_cds = atoi(strtok(NULL, ", "));
-	 	push(proc, queue)
+	 	push(proc, queue);
 	}
 	//closes file
 	fclose(fp);
