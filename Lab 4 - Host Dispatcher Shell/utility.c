@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "utility.h"
 #include "queue.h"
+#define BUFFER_LEN 32
+ #include <string.h>
 
 // Define your utility functions here
 //..........................................................................................
@@ -24,7 +26,7 @@ int alloc_mem(resources res, int size)
      
 
     //Counts number of free spaces in memory.
-    for(int i = 0; i < sizeof(res.max_memory); i++)
+    for(int i = 0; i < (int)sizeof(res.max_memory); i++)
     {
     	if(res.max_memory[i] == 0)
     	{
@@ -92,7 +94,7 @@ void load_dispatch(char *dispatch_file, node_t *queue)
 
     //Opens file in read mode
     FILE *fp = fopen(dispatch_file, "r");
-    
+    char line[BUFFER_LEN];
     //Initializes each integer of the struct, and then pushes the struct onto the queue.
     while(fgets(line, sizeof(line), fp))
 	{
@@ -100,7 +102,7 @@ void load_dispatch(char *dispatch_file, node_t *queue)
 	 	proc.priority = atoi(strtok(NULL, ", "));
 	 	proc.processor_time = atoi(strtok(NULL, ", "));
 	 	proc.Mbytes = atoi(strtok(NULL, ", "));
-	 	proc.num_printers atoi(strtok(NULL, ", "));
+	 	proc.num_printers = atoi(strtok(NULL, ", "));
 	 	proc.num_scanners = atoi(strtok(NULL, ", "));
 	 	proc.num_modems = atoi(strtok(NULL, ", "));
 	 	proc.num_cds = atoi(strtok(NULL, ", "));

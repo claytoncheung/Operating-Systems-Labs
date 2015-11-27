@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -Wall -Wextra -std=gnu99
 LFLAGS = 
 LIBS = 
-SOURCES = hostd.c utility.c queue.c sigtrap.c
+SOURCES = hostd.c utility.c sigtrap.c
 OBJECTS = $(subst .c,.o,$(SOURCES))
 EXE = process hostd
 .PHONY: clean help
@@ -14,7 +14,7 @@ debug: $(EXE)
 process : sigtrap.o
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@ 
 
-hostd : hostd.o utility.o queue.o
+hostd : hostd.o utility.o
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@ 
 
 %.o : %.c
