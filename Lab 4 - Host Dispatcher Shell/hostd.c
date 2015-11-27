@@ -24,7 +24,80 @@
 
 // Define functions declared in hostd.h here
 
-void _runprocess(node_t *queue)
+
+
+int main(int argc, char *argv[])
+{
+    
+    // Declare major variables
+    // node_t is a link-list of type process
+    node_t* dispatch_queue = (node_t*)malloc(sizeof(node_t));
+    node_t* realtime_queue = (node_t*)malloc(sizeof(node_t));
+    node_t* process_queue_1 = (node_t*)malloc(sizeof(node_t));
+    node_t* process_queue_2 = (node_t*)malloc(sizeof(node_t));
+    node_t* process_queue_3 = (node_t*)malloc(sizeof(node_t));
+
+    dispatch_queue = malloc(sizeof(node_t));
+    realtime_queue = malloc(sizeof(node_t));
+    process_queue_1 = malloc(sizeof(node_t));
+    process_queue_2 = malloc(sizeof(node_t));
+    process_queue_3 = malloc(sizeof(node_t));
+
+    resources computer_resources;
+    computer_resources.max_printers = 2;
+    computer_resources.max_scanner = 1;
+    computer_resources.max_modems  = 1;
+    computer_resources.max_cd = 3;
+    memset(computer_resources.max_memory, 0, MEMORY);
+
+    // Load the dispatch list file and create the dispatch queue.
+    load_dispatch("dispatchlist", dispatch_queue);
+
+    // Iterate through each item in the job dispatch list, add each process
+    // to the appropriate queues
+
+    while(1)
+    {
+        process handle = pop(&dispatch_queue);
+
+        if (handle.arrival_time == NULL)
+        {
+            break;
+        }
+        switch(handle.priority)
+        {
+            case 0: push(handle, realtime_queue);
+            case 1: push(handle, process_queue_1);
+            case 2: push(handle, process_queue_2);
+            case 3: push(handle, process_queue_3);
+        }
+    }
+
+
+    // Allocate the resources for each process before it's executed
+    
+    while (realtime_queue != NULL)
+    {
+        _runprocess(computer_resources, realtime_queue);
+    }
+    while(process_queue_1 != NULL)
+    {
+        _runprocess(computer_resources, process_queue_1);
+    }
+    while(process_queue_2 != NULL)
+    {
+        _runprocess(computer_resources, process_queue_2);
+    }
+    while(process_queue_3 != NULL)
+    {
+        _runprocess(computer_resources, process_queue_3);
+    }
+    
+  
+    return EXIT_SUCCESS;
+}
+
+int _runprocess(resources computer_resources, node_t *queue)
 {
     pid_t pid = 0;
     int keep_process = 0;
@@ -33,13 +106,16 @@ void _runprocess(node_t *queue)
     {
         if (keep_process == 0)
         {
-            handler = pop(queue);
+            handler = pop(&queue);
             keep_process = 0;
         }
         if (alloc_mem(computer_resources, handler.Mbytes) != -1)
         {
             pid  = fork();
-            if (pid == -1) return -1;
+            if (pid == -1) 
+            {
+                return -1;
+            }
             else if (pid == 0)
             {
                 execlp("./process", NULL);
@@ -56,65 +132,4 @@ void _runprocess(node_t *queue)
             keep_process = 1;
         }
     }
-}
-
-int main(int argc, char *argv[])
-{
-    
-    // Declare major variables
-    // node_t is a link-list of type process
-    node_t dispatch_queue = malloc(sizeof(node_t));
-    node_t realtime_queue = malloc(sizeof(node_t));
-    node_t process_queue_1 = malloc(sizeof(node_t));
-    node_t process_queue_2 = malloc(sizeof(node_t));
-    node_t process_queue_3 = malloc(sizeof(node_t));
-
-    resources computer_resouces = malloc(sizeof(resources));
-
-    // Load the dispatch list file and create the dispatch queue.
-    load_dispatch("dispatchlist", dispatch_queue);
-
-    // Iterate through each item in the job dispatch list, add each process
-    // to the appropriate queues
-
-    while(1)
-    {
-        process handle = pop(&dispatch_queue);
-
-        if (handle == NULL)
-        {
-            break;
-        }
-        switch(handle.priority)
-        {
-            case 0: push(handle, &realtime_queue);
-            case 1: push(handle, &process_queue_1);
-            case 2: push(handle, &process_queue_2);
-            case 3: push(handle, &process_queue_3);
-            case default;
-        }
-    }
-
-
-    // Allocate the resources for each process before it's executed
-    
-    while (realtime_queue != NULL)
-    {
-        _runprocess(&realtime_queue);
-    }
-    while(process_queue_1 != NULL)
-    {
-        _runprocess(&process_queue_1);
-    }
-    while(process_queue_2 != NULL)
-    {
-        _runprocess(&process_queue_2);
-    }
-    while(process_queue_3 != NULL)
-    {
-        _runprocess(&process_queue_3);
-    }
-    
-  
-    return EXIT_SUCCESS;
 }

@@ -15,7 +15,7 @@
 int alloc_mem(resources res, int size)
 {
     int start_index = 0;
-    int free_space;
+    int free_space = 0;
     //Calculates starting index of resource allocation
     while(res.max_memory[start_index] != 0)
     {
@@ -24,7 +24,7 @@ int alloc_mem(resources res, int size)
      
 
     //Counts number of free spaces in memory.
-    for(int i = 0; i < sizeof(res.max_memory))
+    for(int i = 0; i < sizeof(res.max_memory); i++)
     {
     	if(res.max_memory[i] == 0)
     	{
@@ -39,10 +39,9 @@ int alloc_mem(resources res, int size)
     {
     	perror("OUT OF MEMORY, UNABLE TO ALLOCATE: ");
     	return -1;
-    	break;
     }
 
-    int alloc_total_size = start_index + size);
+    int alloc_total_size = start_index + size;
     //allocates memory
     for(int i = start_index; i < alloc_total_size; i++)
     {
@@ -92,7 +91,7 @@ void load_dispatch(char *dispatch_file, node_t *queue)
     process proc;
 
     //Opens file in read mode
-    FILE fp = fopen(dispatch_file, "r");
+    FILE *fp = fopen(dispatch_file, "r");
     
     //Initializes each integer of the struct, and then pushes the struct onto the queue.
     while(fgets(line, sizeof(line), fp))
@@ -112,3 +111,44 @@ void load_dispatch(char *dispatch_file, node_t *queue)
 }
 
 //..........................................................................................
+/*
+ * Host Dispatcher Shell Project for SOFE 3950U / CSCI 3020U: Operating Systems
+ *
+ * Copyright (C) 2015, <GROUP MEMBERS>
+ * All rights reserved.
+ * 
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include "queue.h"
+
+// Define your FIFO queue functions here, these will most likely be the
+// push and pop functions that you declared in your header file
+
+//..........................................................................................
+void push(process proc, node_t *head)
+{
+    node_t *current = head;
+    while(current->next != NULL)
+    {
+        current = current->next;
+    }
+    //Creates new NULL node for next iteration.
+    current->next = malloc(sizeof(node_t));
+    current->next->proc = proc;
+    current->next->next = NULL;
+}
+
+//..........................................................................................
+process pop(node_t **head)
+{
+    process return_val;
+    node_t *next_node = NULL;
+
+    next_node = (*head)->next;
+    return_val = (*head)->proc;
+    free(*head);
+    *head=next_node;
+
+    return return_val;
+}
