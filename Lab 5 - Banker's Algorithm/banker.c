@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
     // Read in arguments from CLI, NUM_RESOURCES is the number of arguments
     if (argc > 1) {
         for(int i = 0; i<NUM_RESOURCES; i++) {
-            sscanf(argv[i+1], "%d", &(bank.available[i]));
+			bank.available[i] = *argv[i+1];
         }
     }
     else {
@@ -162,29 +162,35 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < NUM_CUSTOMERS; i++) {
 		printf("%d\n", i);
 		for (int j = 0; j < NUM_RESOURCES; j++) {
-			//Initialize request and release
+			// Set request and release values for each resource
+			
+			/*****EVERYTHING BREAKS SOMEWHERE AROUND HERE****/
 			request[j] = (rand()% bank.need[i][j]);
 			release[j] = (rand()% bank.allocation[i][j]);
 			printf("%d\n", request[j]);
 		}
 	}
 	printf("a");
-    #pragma omp parallel for
-	for (int i = 0; i < NUM_CUSTOMERS; i++) {
+	
+	int threadCount = 0;
+    #pragma omp parallel
+	//for (int i = 0; i < NUM_CUSTOMERS; i++) {
+	{
 		bool request_safety, release_safety;
-		release_safety = request_res(i, request);
-		request_safety = release_res(i, release);
-		printf("Thread number %d is making a request", i);
+		release_safety = request_res(threadCount, request);
+		request_safety = release_res(threadCount, release);
+		printf("Thread number %d is making a request", threadCount);
 		for (int j = 0; j < NUM_RESOURCES; j++) {
    			if (release_safety == true)
-    			printf("The request for resource %d for the ammount %d was accepted\n", j, request[i]);
+    			printf("The request for resource %d for the ammount %d was accepted\n", j, request[threadCount]);
     		if (release_safety == false)
-    			printf("The request for resources %d for the ammount %d was denied\n", j, request[i]);
+    			printf("The request for resources %d for the ammount %d was denied\n", j, request[threadCount]);
     		if (request_safety == true)
-    			printf("Releasing resource %d for the amount %d was accepted\n", j, release[i]);
+    			printf("Releasing resource %d for the amount %d was accepted\n", j, release[threadCount]);
     		if (request_safety == false)
-    			printf("Releasing resource %d for the amount %d was denied\n", j, release[i]);
+    			printf("Releasing resource %d for the amount %d was denied\n", j, release[threadCount]);
 		}
+		threadCount++;
 	}
 
     // If your program hangs you may have a deadlock, otherwise you *may* have
