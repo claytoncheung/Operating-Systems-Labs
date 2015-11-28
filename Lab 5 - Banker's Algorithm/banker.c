@@ -3,13 +3,15 @@
  *
  * Copyright (C) 2015, <GROUP MEMBERS>
  * All rights reserved.
- * 
+ *
  */
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <pthread.h>
-#include <semaphore.h>
+#include <omp.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
 #include "banker.h"
 
 // Put any other macros or constants here using #define
@@ -19,37 +21,35 @@
 
 banker bank;    //Bank struct (keeps all arrays together in one object)
 
-
 // Define functions declared in banker.h here
 bool request_res(int n_customer, int request[])
 {
      //Available = 1, Unavailable = 0
      bool rquest = false;
-     for(int i = 0; i < sizeof(request); i++)
+     for(int i = 0; i < NUM_RESOURCES; i++)
      {
         if(request[i] <= bank.need[n_customer][i])
         {
-
-            while(request[i] > bank.available[i]);
+            //while(request[i] > bank.available[i]);
             if(request[i] <= bank.available[i])
             {
-                bank.available[i] -= request[i];
-                bank.allocation[n_customer[i] += request[i];
-                bank.need[n_customer][i] -= request[i];
-                if(safe_state(n_customer))
+                #pragma omp critical
                 {
-                    rquest = true;
+                    bank.available[i] -= request[i];
+                    bank.allocation[n_customer][i] += request[i];
+                    bank.need[n_customer][i] -= request[i];
+                    if(safe_state(n_customer))
+                    {
+                        rquest = true;
+                    }
+                    else
+                    {
+                        bank.available[i] += request[i];
+                        bank.allocation[n_customer][i] -= request[i];
+                        bank.need[n_customer][i] += request[i];
+                    }
                 }
-                else
-                {
-                    bank.available += request[i];
-                    bank.allocation[n_customer][i] -= request[i];
-                    bank.need[n_customer][i] += request[i];
-
-                }
-                
             }
-
         }
         else
         {
@@ -57,10 +57,8 @@ bool request_res(int n_customer, int request[])
             rquest = false;
             break;
         }
-        return rquest;
      }
-
-   
+    return rquest;
 }
 
 // Release resources, returns true if successful
@@ -68,19 +66,22 @@ bool release_res(int n_customer, int release[])
 {
     bool rlease = false;
 
-    for(int i = 0; i < sizeof(release); i++)
+    for(int i = 0; i < NUM_RESOURCES; i++)
     {
         if(release[i] <= bank.allocation[n_customer][i])
         {
-            bank.available[i] += release[i];
-            if(safe_state(n_customer))
+            #pragma omp critical
             {
-                rlease = true;
+                bank.available[i] += release[i];
+                if(safe_state(n_customer))
+                {
+                    rlease = true;
+                }
             }
         }
         else
         {
-            perror("Releasing too many resources. Aborting...")
+            perror("Releasing too many resources. Aborting...");
             rlease = false;
             break;
         }
@@ -95,25 +96,25 @@ bool safe_state(int n_customer)
     bool safe = true;
     int work[NUM_RESOURCES];
 
-    memcpy(work, bank.available, sizeof(bank.available));
+    memcpy(work, bank.available, NUM_RESOURCES);
 
     bool finish[NUM_CUSTOMERS];
-    for(int i = 0; i < sizeof(finish); i++)
+    for(int i = 0; i < NUM_CUSTOMERS; i++)
     {
         finish[i] = false;
     }
 
-    for(int j = 0; j < sizeof(finish); j++)
+    for(int j = 0; j < NUM_CUSTOMERS; j++)
     {
         if(!finish[j] && bank.need[n_customer][j] <= work[j])
         {
-            work[j] += allocation[n_customer][j];
+            work[j] += bank.allocation[n_customer][j];
             finish[j] = true;
         }
     }
 
     //If ANY value of finish is false, then the system is not in a safe state
-    for(int i = 0; i < sizeof(finish); i++)
+    for(int i = 0; i < NUM_CUSTOMERS; i++)
     {
         if(finish[i] == false)
         {
@@ -126,29 +127,67 @@ bool safe_state(int n_customer)
 
 }
 
-int main(int argc, char *argv[])
-{
-    // ==================== YOUR CODE HERE ==================== //
+int main(int argc, char *argv[]) {
+    srand(time(NULL));
+    //int r;
+    int request[NUM_RESOURCES] = {0} ;
+    int release[NUM_RESOURCES] = {0} ;
+    bool request_safety, release_safety;
 
-    // Read in arguments from CLI, NUM_RESOURCES is the number of arguments   
-    for(int i = 0; i<NUM_RESOURCES; i++)
-    {
-        sscanf(argv[i+1], "%d", &(bank.available[i]));
+    #ifdef _OPENMP
+    omp_set_num_threads(NUM_CUSTOMERS);
+    #endif
+    // Read in arguments from CLI, NUM_RESOURCES is the number of arguments
+    if (argc > 1) {
+        for(int i = 0; i<NUM_RESOURCES; i++) {
+            sscanf(argv[i+1], "%d", &(bank.available[i]));
+        }
     }
-    
-
-
+    else {
+        return 0;
+    }
     // Allocate the available resources
-
+    // Initialize max and need
+    for (int i = 0; i < NUM_CUSTOMERS; i++){
+        for (int j = 0; j < NUM_RESOURCES; j++){
+            int max_request = bank.available[j];
+            //Initialize max to a random number up to available-1
+            bank.maximum[i][j] =(1+ (rand()%max_request)) ;
+            //Initialize need to be the maximum since there is no allocated resources
+            bank.need[i][j] = bank.maximum[i][j];
+        }
+    }
     // Initialize the pthreads, locks, mutexes, etc.
-
     // Run the threads and continually loop
-
     // The threads will request and then release random numbers of resources
+
+    #pragma omp parallel for
+	for (int i = 0; i < NUM_CUSTOMERS; i++) {
+		for (int j = 0; j < NUM_RESOURCES; j++) {
+			// Set request and release values for each resource
+             request[j] = (/*rand()% */bank.need[i][j]);
+		}
+            request_safety = request_res(i, request);
+    		printf("Thread number %d is making a request", i);
+    		for (int j = 0; j < NUM_RESOURCES; j++) {
+       			if (request_safety == true)
+        			printf("The request by thread %d for the ammount %d was accepted\n", i, request[j]);
+        		if (request_safety == false)
+        			printf("The request by thread %d for the ammount %d was denied\n", i, request[j]);
+                release[j] = (rand()% (bank.allocation[i][j] +1));
+            	printf("%d\n", request[j]);
+                release_safety = release_res(i, release);
+
+        		if (release_safety == true)
+        			printf("Thread number %d releasing the amount %d was accepted\n", i, release[j]);
+        		if (release_safety == false)
+        			printf("Thread number %d releasing the amount %d was denied\n", i, release[j]);
+    		}
+	}
 
     // If your program hangs you may have a deadlock, otherwise you *may* have
     // implemented the banker's algorithm correctly
-    
+
     // If you are having issues try and limit the number of threads (NUM_CUSTOMERS)
     // to just 2 and focus on getting the multithreading working for just two threads
 

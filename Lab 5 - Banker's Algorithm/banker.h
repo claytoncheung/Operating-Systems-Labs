@@ -16,7 +16,7 @@
 
 // Add any additional data structures or functions you want here
 // perhaps make a clean bank structure instead of several arrays...
-struct{
+typedef struct{
 	// Put global environment variables here
 	// Available amount of each resource
 	int available[NUM_RESOURCES];
