@@ -5,26 +5,26 @@
   
   usage:
   
-    sigtrap [n]
-      
-    [n] is time for process to exist - default 20 seconds 
-    
+  sigtrap [n]
+  
+  [n] is time for process to exist - default 20 seconds 
+  
   program ticks away reporting process id and tick count every
   second. the program traps and reports the following signals:
 
-    SIGINT, SIGQUIT, SIGHUP, SIGTERM, SIGABRT, SIGCONT, SIGTSTP
-        
+  SIGINT, SIGQUIT, SIGHUP, SIGTERM, SIGABRT, SIGCONT, SIGTSTP
+  
   program can not trap SIGSTOP or SIGKILL
-    
+  
   to help identify specific processes, the program uses the process
   id to select one of 32 colour combinations for the display to an
   ASCC terminal.
-    
+  
   output is to stdout (set in #define), reset to BLACK and NORMAL
   and flushed after every printf.
-      
- ****************************************************************
- *******************************************************************/
+  
+*******************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,90 +97,87 @@ static int signal_SIGABRT = FALSE;
 static int signal_SIGCONT = FALSE;
 static int signal_SIGTSTP = FALSE;
 
-/*******************************************************************/
-
-int main(int argc, char *argv[])
-{
-    pid_t pid = getpid();             // get process id 
-    int i, cycle, rc;    
-    long clktck = sysconf(_SC_CLK_TCK);
-    struct tms t;
-    clock_t starttick, stoptick;
-    sigset_t mask;
-    
-    colour = colours[pid % N_COLOUR]; // select colour for this process
+int main(int argc, char *argv[]) {
+  pid_t pid = getpid();             // get process id 
+  int i, cycle, rc;    
+  long clktck = sysconf(_SC_CLK_TCK);
+  struct tms t;
+  clock_t starttick, stoptick;
+  sigset_t mask;
+  
+  colour = colours[pid % N_COLOUR]; // select colour for this process
 	
-    if (argc > 2 || (argc == 2 && !isdigit((int)argv[1][0])))
-        PrintUsage(argv[0]);	
+  if (argc > 2 || (argc == 2 && !isdigit((int)argv[1][0]))) {
+    PrintUsage(argv[0]);	
+  }
 	
-    fprintf(stdout,"%s%7d; START" BLACK NORMAL "\n", colour, (int) pid);
-    fflush(stdout);	
-		
-    signal (SIGINT, SignalHandler);   // hook up signal handler
-    signal (SIGQUIT, SignalHandler);
-    signal (SIGHUP, SignalHandler);	
-    signal (SIGTERM, SignalHandler);
-    signal (SIGABRT, SignalHandler);
+  fprintf(stdout,"%s%7d; START" BLACK NORMAL "\n", colour, (int) pid);
+  fflush(stdout);	
+	
+  signal (SIGINT, SignalHandler);   // hook up signal handler
+  signal (SIGQUIT, SignalHandler);
+  signal (SIGHUP, SignalHandler);	
+  signal (SIGTERM, SignalHandler);
+  signal (SIGABRT, SignalHandler);
 //  signal (SIGCONT, SignalHandler);  // do this intrinsically after return from SIGTSTP
                                       // due to Darwin/BSD inconsistent SIGCONT behaviour
-    signal (SIGTSTP, SignalHandler);
-                                        	
-    rc = setpriority(PRIO_PROCESS, 0, 20); // be nice, lower priority by 20 	
-    cycle = argc < 2 ? DEFAULT_TIME : atoi(argv[1]);  // get tick count 
-    if (cycle <= 0) cycle = 1;
-
-    for (i = 0; i < cycle;) {          // tick 
-
-        if (signal_SIGCONT) {
-            signal_SIGCONT = FALSE;
-            fprintf(stdout,"%s%7d; SIGCONT" BLACK NORMAL "\n", colour, (int) pid);
-            fflush(stdout);
-        }
-            
-        starttick = times (&t);        // use timer to ascertain whether 'tick' should be
-        rc = sleep(1);                 //  reported
-        stoptick = times (&t);
-         
-        if (rc == 0 || (stoptick-starttick) > clktck/2)
-            fprintf(stdout,"%s%7d; tick %d" BLACK NORMAL "\n", colour, (int) pid, ++i);
-                
-        if (signal_SIGINT) {
-            fprintf(stdout,"%s%7d; SIGINT" BLACK NORMAL "\n", colour, (int) pid);
-            exit(0);
-        }
-        if (signal_SIGQUIT) {
-            fprintf(stdout,"%s%7d; SIGQUIT" BLACK NORMAL "\n", colour, (int) pid);
-            exit(0);
-        }
-        if (signal_SIGHUP) {
-            fprintf(stdout,"%s%7d; SIGHUP" BLACK NORMAL "\n", colour, (int) pid);
-            exit(0);
-        }
-        if (signal_SIGTSTP) {
-            signal_SIGTSTP = FALSE;
-            fprintf(stdout,"%s%7d; SIGTSTP" BLACK NORMAL "\n", colour, (int) pid);
-            fflush(stdout);
-            sigemptyset (&mask);            // unblock SIGSTP if necessary (BSD/OS X)
-            sigaddset (&mask, SIGTSTP);
-            sigprocmask (SIG_UNBLOCK, &mask, NULL);
-            signal(SIGTSTP, SIG_DFL);       // reset trap to default
-            raise (SIGTSTP);                // now suspend ourselves
-            signal(SIGTSTP, SignalHandler); // reset trap on return from suspension
-            signal_SIGCONT = TRUE;          // set flag here rather than trap signal
-        }
-        if (signal_SIGABRT) {
-            fprintf(stdout,"%s%7d; SIGABRT" BLACK NORMAL "\n", colour, (int) pid);
-            fflush(stdout);
-            signal (SIGABRT, SIG_DFL);
-            raise (SIGABRT);
-        }
-        if (signal_SIGTERM) {
-            fprintf(stdout,"%s%7d; SIGTERM" BLACK NORMAL "\n", colour, (int) pid);
-            exit(0);
-        }                
-        fflush(stdout);
+  signal (SIGTSTP, SignalHandler);
+  rc = setpriority(PRIO_PROCESS, 0, 20); // be nice, lower priority by 20 	
+  cycle = argc < 2 ? DEFAULT_TIME : atoi(argv[1]);  // get tick count 
+  if (cycle <= 0) cycle = 1;
+  for (i = 0; i < cycle;) {          // tick 
+    if (signal_SIGCONT) {
+      signal_SIGCONT = FALSE;
+      fprintf(stdout,"%s%7d; SIGCONT" BLACK NORMAL "\n", colour, (int) pid);
+      fflush(stdout);
     }
-    exit(0);
+      
+    starttick = times (&t);        // use timer to ascertain whether 'tick' should be
+    rc = sleep(1);                 //  reported
+    stoptick = times (&t);
+     
+    if (rc == 0 || (stoptick-starttick) > clktck/2) {
+      fprintf(stdout,"%s%7d; tick %d" BLACK NORMAL "\n", colour, (int) pid, ++i);
+    }
+    if (signal_SIGINT) {
+      fprintf(stdout,"%s%7d; SIGINT" BLACK NORMAL "\n", colour, (int) pid);
+      exit(0);
+    }
+    if (signal_SIGQUIT) {
+      fprintf(stdout,"%s%7d; SIGQUIT" BLACK NORMAL "\n", colour, (int) pid);
+      exit(0);
+    }
+    if (signal_SIGHUP) {
+      fprintf(stdout,"%s%7d; SIGHUP" BLACK NORMAL "\n", colour, (int) pid);
+      exit(0);
+    }
+    if (signal_SIGTSTP) {
+      signal_SIGTSTP = FALSE;
+      fprintf(stdout,"%s%7d; SIGTSTP" BLACK NORMAL "\n", colour, (int) pid);
+      fflush(stdout);
+      sigemptyset (&mask);            // unblock SIGSTP if necessary (BSD/OS X)
+      sigaddset (&mask, SIGTSTP);
+      sigprocmask (SIG_UNBLOCK, &mask, NULL);
+      signal(SIGTSTP, SIG_DFL);       // reset trap to default
+      raise (SIGTSTP);                // now suspend ourselves
+      signal(SIGTSTP, SignalHandler); // reset trap on return from suspension
+      signal_SIGCONT = TRUE;          // set flag here rather than trap signal
+    }
+
+    if (signal_SIGABRT) {
+      fprintf(stdout,"%s%7d; SIGABRT" BLACK NORMAL "\n", colour, (int) pid);
+      fflush(stdout);
+      signal (SIGABRT, SIG_DFL);
+      raise (SIGABRT);
+    }
+
+    if (signal_SIGTERM) {
+      fprintf(stdout,"%s%7d; SIGTERM" BLACK NORMAL "\n", colour, (int) pid);
+      exit(0);
+    }                
+    fflush(stdout);
+  }
+  exit(0);
 }
 
 /******************************************************************
@@ -196,32 +193,31 @@ int main(int argc, char *argv[])
   Note minimal time in signal handler
 
  *******************************************************************/
-  
-static void SignalHandler(int sig)        // trap signals from shell/system 
-{	
-    switch (sig) {
-        case SIGINT:
-            signal_SIGINT = TRUE;
-            break;
-        case SIGQUIT:
-            signal_SIGQUIT = TRUE;
-            break;
-        case SIGHUP:
-            signal_SIGHUP = TRUE;
-            break;
-        case SIGCONT:
-            signal_SIGCONT = TRUE;
-            break;
-	case SIGTSTP:
-            signal_SIGTSTP = TRUE;
-            break;
-        case SIGABRT:
-            signal_SIGABRT = TRUE;
-            break;
-        case SIGTERM:
-            signal_SIGTERM = TRUE;
-            break;
-    }
+// trap signals from shell/system
+static void SignalHandler(int sig) {	
+  switch (sig) {
+    case SIGINT:
+      signal_SIGINT = TRUE;
+      break;
+    case SIGQUIT:
+      signal_SIGQUIT = TRUE;
+      break;
+    case SIGHUP:
+      signal_SIGHUP = TRUE;
+      break;
+    case SIGCONT:
+      signal_SIGCONT = TRUE;
+      break;
+	  case SIGTSTP:
+      signal_SIGTSTP = TRUE;
+      break;
+    case SIGABRT:
+      signal_SIGABRT = TRUE;
+      break;
+    case SIGTERM:
+      signal_SIGTERM = TRUE;
+      break;
+  }
 }
 
 /*******************************************************************
@@ -234,23 +230,22 @@ static void SignalHandler(int sig)        // trap signals from shell/system
             if NULL defaults to DEFAULT_NAME      
  *******************************************************************/
  
-void PrintUsage(char * pgmName)
-{
-    char * actualName;
-    
-    if (!(actualName = StripPath(pgmName))) actualName = DEFAULT_NAME;
-    
-    printf("\n"
-           "  program: %s - trap and report process control signals\n\n"
-           "    usage:\n\n"
-           "      %s [seconds]\n\n"
-           "      where [seconds] is the lifetime of the program - default = 20s.\n\n"
-           "    the program sleeps for a second, reports process id and tick count\n"
-           "    before sleeping again. any process control signals: SIGINT, SIGQUIT\n"
-           "    SIGHUP, SIGTERM, SIGABRT, SIGCONT, SIGTSTP, are trapped and\n"
-           "    reported before being actioned.\n\n",
-           actualName, actualName );
-    exit(127);
+void PrintUsage(char * pgmName) {
+  char * actualName;
+  
+  if (!(actualName = StripPath(pgmName))) actualName = DEFAULT_NAME;
+  
+  printf("\n"
+         "  program: %s - trap and report process control signals\n\n"
+         "    usage:\n\n"
+         "      %s [seconds]\n\n"
+         "      where [seconds] is the lifetime of the program - default = 20s.\n\n"
+         "    the program sleeps for a second, reports process id and tick count\n"
+         "    before sleeping again. any process control signals: SIGINT, SIGQUIT\n"
+         "    SIGHUP, SIGTERM, SIGABRT, SIGCONT, SIGTSTP, are trapped and\n"
+         "    reported before being actioned.\n\n",
+         actualName, actualName );
+  exit(127);
 }
 
 /*******************************************************************
@@ -266,19 +261,19 @@ if NULL or pathname is a directory ending in a '/'
 returns NULL
 *******************************************************************/
 
-char * StripPath(char * pathname)
-{
-    char * filename = pathname;
-
-    if (filename && *filename) {           // non-zero length string
-        filename = strrchr(filename, '/'); // look for last '/'
-        if (filename)                      // found it
-            if (*(++filename))             //  AND file name exists
-                return filename;
-            else
-                return NULL;
-        else
-            return pathname;               // no '/' but non-zero length string
-    }                                      // original must be file name only
-    return NULL;
+char * StripPath(char * pathname) {
+  char * filename = pathname;
+  if (filename && *filename) {          // non-zero length string
+    filename = strrchr(filename, '/');  // look for last '/'
+    if (filename) {                     // found it
+      if (*(++filename)) {              //  AND file name exists
+        return filename;
+      } else {
+        return NULL;
+      }
+    } else {
+      return pathname;                  // no '/' but non-zero length string
+    }
+  }                                     // original must be file name only
+  return NULL;
 }
